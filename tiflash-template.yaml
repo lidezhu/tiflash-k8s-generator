@@ -1,0 +1,273 @@
+# 1. install tidb-cluster using tidb-operator in the namespace you choosed
+# 2. check the storage in storageClassName exists on your cluster
+# 3. kubectl apply -f tiflash.yaml -n {your-namespace}
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: tiflash
+spec:
+  selector:
+    matchLabels:
+      app: tiflash
+  serviceName: tiflash
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: tiflash
+    spec:
+      initContainers:
+      - name: init-tiflash
+        image: hub.pingcap.net/tiflash/tics:{image_tag}
+        command:
+        - bash
+        - "-c"
+        - |
+          set -ex
+          [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+          ordinal=${BASH_REMATCH[1]}
+          sed s/{pod_num}/${ordinal}/g /etc/tiflash/config_templ.toml > /data/config.toml
+          sed s/{pod_num}/${ordinal}/g /etc/tiflash/proxy_templ.toml > /data/proxy.toml
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: config
+          mountPath: /etc/tiflash
+      containers:
+      - name: tiflash
+        image: hub.pingcap.net/tiflash/tics:{image_tag}
+        command:
+        - bash
+        - "-c"
+        - |
+          set -ex
+          [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+          ordinal=${BASH_REMATCH[1]}
+          set +ex
+          while true; do
+            nslookup tiflash-${ordinal}.tiflash.{namespace}.svc
+            if [ ${?} -eq 0 ]; then
+              break;
+            fi
+            sleep 1
+          done
+          /tiflash server --config-file /data/config.toml
+        env:
+        - name: LD_LIBRARY_PATH
+          value: /
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: config
+          mountPath: /etc/tiflash
+        - name: logs
+          mountPath: /logs
+      # To better support k8s, allow normal log to output stdout,
+      # so only the error log tailer is needed
+      - name: tiflash-log
+        image: busybox
+        command:
+        - /bin/sh
+        - -c
+        - |
+          touch /logs/server.log
+          tail -n0 -F /logs/server.log
+        volumeMounts:
+        - name: logs
+          mountPath: /logs
+      - name: error-log
+        image: busybox
+        command:
+        - /bin/sh
+        - -c
+        - |
+          touch /logs/error.log
+          tail -n0 -F /logs/error.log
+        volumeMounts:
+        - name: logs
+          mountPath: /logs
+      volumes:
+      - name: logs
+        emptyDir: {}
+      - name: config
+        configMap:
+          name: tiflash
+          items:
+          - key: config_templ.toml
+            path: config_templ.toml
+          - key: users.toml
+            path: users.toml
+          - key: proxy_templ.toml
+            path: proxy_templ.toml
+  volumeClaimTemplates:
+  - metadata:
+      name: data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "{storage_class_name}"
+      resources:
+        requests:
+          storage: 100Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tiflash
+  labels:
+    app: tiflash
+spec:
+  ports:
+  - name: flash
+    port: 3930
+  - name: tcp
+    port: 9000
+  - name: http
+    port: 8123
+  clusterIP: None
+  selector:
+    app: tiflash
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tiflash
+data:
+  # To better support K8s, the related address needs to be configured from command line arguments.
+  # eg. raft.pd_addr, flash.service_addr, flash.tidb_status_addr
+  config_templ.toml: |
+    tmp_path = "/data/tmp"
+    display_name = "TiFlash"
+    default_profile = "default"
+    users_config = "/etc/tiflash/users.toml"
+    path = "/data/db"
+    mark_cache_size = 5368709120
+    listen_host = "0.0.0.0"
+    tcp_port = 9000
+    http_port = 8123
+    interserver_http_port = 9009
+
+    [flash]
+    tidb_status_addr = "{tidb_cluster_name}-tidb.{namespace}.svc:10080"
+    service_addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:3930"
+    overlap_threshold = 0.6
+
+    [flash.flash_cluster]
+    master_ttl = 60
+    refresh_interval = 20
+    update_rule_interval = 5
+    cluster_manager_path = "/flash_cluster_manager"
+
+    [flash.proxy]
+    addr = "0.0.0.0:20170"
+    data-dir = "/data/proxy"
+    config = "/data/proxy.toml"
+    log-file = "/logs/proxy.log"
+
+    [logger]
+    level = "trace"
+    log = "/logs/server.log"
+    errorlog = "/logs/error.log"
+    size = "4000M"
+    count = 10
+
+    [application]
+    runAsDaemon = true
+
+    [raft]
+    kvstore_path = "/data/kvstore"
+    pd_addr = "{tidb_cluster_name}-pd.{namespace}.svc:2379"
+
+  users.toml: |
+    [quotas]
+
+    [quotas.default]
+
+    [quotas.default.interval]
+    duration = 3600
+    queries = 0
+    errors = 0
+    result_rows = 0
+    read_rows = 0
+    execution_time = 0
+
+    [users]
+
+    [users.readonly]
+    password = ""
+    profile = "readonly"
+    quota = "default"
+
+    [users.readonly.networks]
+    ip = "::/0"
+
+    [users.default]
+    password = ""
+    profile = "default"
+    quota = "default"
+
+    [users.default.networks]
+    ip = "::/0"
+
+    [profiles]
+
+    [profiles.readonly]
+    readonly = 1
+
+    [profiles.default]
+    max_memory_usage = 10000000000
+    use_uncompressed_cache = 0
+    load_balancing = "random"
+
+  proxy_templ.toml: |
+    log-level = "info"
+
+    [readpool.storage]
+
+    [readpool.coprocessor]
+
+    [server]
+    labels = { "tiflash_http_port" = "8123" }
+    engine-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:3930"
+    advertise-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:20170"
+
+    [storage]
+
+    [pd]
+
+    [metric]
+
+    [raftstore]
+    raftdb-path = ""
+    sync-log = true
+    #max-leader-missing-duration = "22s"
+    #abnormal-leader-missing-duration = "21s"
+    #peer-stale-state-check-interval = "20s"
+    hibernate-regions = false
+
+    [coprocessor]
+
+    [rocksdb]
+    wal-dir = ""
+    max-open-files = 1000
+
+    [rocksdb.defaultcf]
+    block-cache-size = "10GB"
+
+    [rocksdb.lockcf]
+    block-cache-size = "4GB"
+
+    [rocksdb.writecf]
+    block-cache-size = "4GB"
+
+    [raftdb]
+    max-open-files = 1000
+
+    [raftdb.defaultcf]
+    block-cache-size = "1GB"
+
+    [security]
+    ca-path = ""
+    cert-path = ""
+    key-path = ""
+
+    [import]

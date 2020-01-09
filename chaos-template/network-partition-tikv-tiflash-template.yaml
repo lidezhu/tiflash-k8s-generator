@@ -1,0 +1,24 @@
+apiVersion: pingcap.com/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: {prefix}-tikv-p
+  namespace: tiflash-chaos
+spec:
+  action: partition
+  mode: all
+  selector:
+    namespaces:
+      - {namespace}
+    labelSelectors:
+      "app.kubernetes.io/component": "tikv"
+  direction: to
+  target:
+    selector:
+      namespaces:
+        - {namespace}
+      labelSelectors:
+        "app": "tiflash"
+    mode: all
+  duration: "20s"
+  scheduler:
+    cron: "@every 40s"

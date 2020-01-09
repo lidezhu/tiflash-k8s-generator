@@ -1,0 +1,21 @@
+apiVersion: pingcap.com/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: {prefix}-pd-d
+  namespace: tiflash-chaos
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - {namespace}
+    labelSelectors:
+      "app.kubernetes.io/component": "pd"
+  delay:
+    latency: "2000ms"
+    correlation: "1"
+    jitter: "100ms"
+  duration: "20s"
+  scheduler:
+    cron: "@every 40s"
+    

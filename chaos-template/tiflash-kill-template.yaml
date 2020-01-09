@@ -1,0 +1,15 @@
+apiVersion: pingcap.com/v1alpha1
+kind: PodChaos
+metadata:
+  name: {prefix}-tiflash-k
+  namespace: tiflash-chaos
+spec:
+  action: pod-kill
+  mode: one
+  selector:
+    namespaces:
+      - {namespace}
+    labelSelectors:
+      "app": "tiflash"
+  scheduler:
+    cron: "@every 2m"
