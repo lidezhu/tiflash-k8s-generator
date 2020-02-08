@@ -1,12 +1,3 @@
-# apply(run)
-# delete [false / true]
-# clear
-# show
-# desc [mod] [num]
-# log [mod] [num] [container]
-# copy
-# exec [mod] [num] [container]
-# help (print real command behind)
 source "`cd $(dirname ${BASH_SOURCE[0]}) && pwd`/_env.sh"
 
 
@@ -16,6 +7,8 @@ function k8s_command()
 		echo "usage: <cmd> command" >&2
 		exit 1
 	fi
+
+	local command="${1}"
 
 	shift 1
 
@@ -34,7 +27,7 @@ function k8s_command()
 	fi
 
 	if [ "${command}" == 'run' ]; then
-		command="apply"
+		local command="apply"
 	fi
 
 	"${command}" "${namespace}" "${name}" "${@}"

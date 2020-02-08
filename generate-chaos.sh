@@ -7,11 +7,11 @@ if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ]; then
 fi
 
 namespace="${1}"
-prefix="${2}"
+chaos_namespace="${2}"
 sub_dir="${3}"
 
 render_str="namespace=${namespace}"
-render_str="${render_str}#prefix=${prefix}"
+render_str="${render_str}#chaos_namespace=${chaos_namespace}"
 render_templ "${here}/chaos-template/network-delay-pd-tiflash-template.yaml" "${here}/${sub_dir}/network-delay-pd-tiflash.yaml" "${render_str}"
 render_templ "${here}/chaos-template/network-delay-tikv-tiflash-template.yaml" "${here}/${sub_dir}/network-delay-tikv-tiflash.yaml" "${render_str}"
 render_templ "${here}/chaos-template/network-partition-pd-tiflash-template.yaml" "${here}/${sub_dir}/network-partition-pd-tiflash.yaml" "${render_str}"

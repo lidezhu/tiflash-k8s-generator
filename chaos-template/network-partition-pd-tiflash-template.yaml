@@ -1,8 +1,8 @@
 apiVersion: pingcap.com/v1alpha1
 kind: NetworkChaos
 metadata:
-  name: {prefix}-pd-p
-  namespace: tiflash-chaos
+  name: {chaos_namespace}-pd-p
+  namespace: {chaos_namespace}
 spec:
   action: partition
   mode: all

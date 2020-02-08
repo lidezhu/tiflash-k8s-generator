@@ -1,3 +1,5 @@
+source "`cd $(dirname ${BASH_SOURCE[0]}) && pwd`/_helper.sh"
+
 function apply()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
@@ -8,13 +10,273 @@ function apply()
 	local namespace="${1}"
 	local name="${2}"
 	kubectl apply -f tidb-cluster.yaml -n "${namespace}"
-	# TODO
 	while true; do
-		# wait for tidb cluster ready
+		local pd_ready_num=`kubectl get pod -n "${namespace}" | grep pd | grep Running | wc -l`
+		local tikv_ready_num=`kubectl get pod -n "${namespace}" | grep tikv | grep Running | wc -l`
+		local tidb_ready_num=`kubectl get pod -n "${namespace}" | grep tidb | grep Running | wc -l`
+		if [ "${pd_ready_num}" -eq 3 ] && [ "${tikv_ready_num}" -eq 3 ] && [ "${tidb_ready_num}" -eq 1 ]; then
+			break
+		fi
+		echo "wait for tidb cluster ready"
+		sleep 10
 	done
 
 	kubectl apply -f tiflash.yaml -n "${namespace}"
+	while true; do
+		local tiflash_ready_num=`kubectl get pod -n "${namespace}" | grep pd | grep Running | wc -l`
+		if [ "${tiflash_ready_num}" -eq 3 ]; then
+			break
+		fi
+		echo "wait for tiflash pod ready"
+		sleep 10
+	done
 }
 
 export -f apply
 
+function clear()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <func> namespace name" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+
+	kubectl delete pvc --all -n "${namespace}"
+	echo "delete pvc done"
+}
+export -f clear
+
+function delete()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <func> namespace name" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+
+	if [ -z "${3+x}" ]; then
+		local clear_data='true'
+	else
+		local clear_data='${3}'
+	fi
+
+	kubectl delete -f tiflash.yaml -n "${namespace}"
+	sleep 5
+	kubectl delete -f tidb-cluster.yaml -n "${namespace}"
+	while true; do
+		local pod_count=`kubectl get pod -n "${namespace}"
+		if [ "${pod_count}" -eq 0 ]; then
+			break
+		fi
+		echo "wait for all pod terminate"
+		sleep 10
+	done
+	if [ "${clear_data}" == 'true' ]; then
+		clear "${namespace}" "${name}"
+	fi
+}
+export -f delete
+
+function show()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <func> namespace name" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+
+	kubectl get pod -n "${namespace}"
+}
+export -f show
+
+function desc()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
+		echo "usage: <func> namespace name mod pod-num" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	local mod="${3}"
+	local pod_num="${4}"
+
+	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
+
+	kubectl desc pod "${pod_name}" -n "${namespace}"
+}
+export -f desc
+
+function log()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
+		echo "usage: <func> namespace name mod pod-num" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	local mod="${3}"
+	local pod_num="${4}"
+
+	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
+
+	if [ "${mod}" == "tidb" ]; then
+		kubectl logs "${pod_name}" -c tidb -n "${namespace}"
+	elif [ "${mod}" == "tiflash" ]; then
+		kubectl logs "${pod_name}" -c tiflash-log -n "${namespace}"
+	else
+		kubectl logs "${pod_name}" -n "${namespace}"
+	fi
+}
+export -f log
+
+function copy()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ] || [ -z "${5+x}" ] || [ -z "${6+x}" ]; then
+		echo "usage: <func> namespace name mod pod-num container-file-path host-file-path" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	local mod="${3}"
+	local pod_num="${4}"
+	local container_file_path="${5}"
+	local host_file_path="${6}"
+
+	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
+
+	if [ "${mod}" == "tidb" ]; then
+		kubectl cp "${namespace}/${pod_name}":"${container_file_path}" "${host_file_path}" -c tidb
+	elif [ "${mod}" == "tiflash" ]; then
+		kubectl cp "${namespace}/${pod_name}":"${container_file_path}" "${host_file_path}" -c tiflash
+	else
+		kubectl cp "${namespace}/${pod_name}":"${container_file_path}" "${host_file_path}"
+	fi
+}
+export -f copy
+
+function exec()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
+		echo "usage: <func> namespace name mod pod-num" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	local mod="${3}"
+	local pod_num="${4}"
+
+	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
+
+	if [ "${mod}" == "tidb" ]; then
+		kubectl exec -it "${pod_name}" -c tidb -n "${namespace}" /bin/sh
+	elif [ "${mod}" == "tiflash" ]; then
+		kubectl exec -it "${pod_name}" -c tiflash-log -n "${namespace}" /bin/bash
+	else
+		kubectl exec -it "${pod_name}" -n "${namespace}" /bin/sh
+	fi
+}
+export -f exec
+
+function port()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
+		echo "usage: <func> namespace name mod port" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	local mod="${3}"
+	local port="${4}"
+
+	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
+
+	if [ "${mod}" == "tidb" ]; then
+		kubectl  port-forward "svc/${name}-tidb" -n "${namespace}" ${port}:4000 >/dev/null 2>&1 &
+	elif [ "${mod}" == "pd" ]; then
+		kubectl  port-forward "svc/${name}-pd" -n "${namespace}" ${port}:2379 >/dev/null 2>&1 &
+	else
+		echo "unsupported mod ${mod}" >&2
+		exit 0
+	fi
+}
+export -f port
+
+# chaos-related func
+function chaos_apply()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <func> namespace type" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local type="${2}"
+
+	if [ "${type}" == "kill" ]; then
+		kubectl apply -f tiflash-kill.yaml -n "${namespace}"
+	elif [ "${type}" == "failure" ]; then
+		kubectl apply -f tiflash-failure.yaml -n "${namespace}"
+	elif [ "${type}" == "delay_pd" ]; then
+		kubectl apply -f network-delay-pd-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "delay_tikv" ]; then
+		kubectl apply -f network-delay-tikv-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "partition_pd" ]; then
+		kubectl apply -f network-partition-pd-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "partition_tikv" ]; then
+		kubectl apply -f network-partition-tikv-tiflash.yaml -n "${namespace}"
+	fi
+}
+export -f chaos_apply
+
+function chaos_delete()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <func> namespace type" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local type="${2}"
+
+	if [ "${type}" == "kill" ]; then
+		kubectl delete -f tiflash-kill.yaml -n "${namespace}"
+	elif [ "${type}" == "failure" ]; then
+		kubectl delete -f tiflash-failure.yaml -n "${namespace}"
+	elif [ "${type}" == "delay_pd" ]; then
+		kubectl delete -f network-delay-pd-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "delay_tikv" ]; then
+		kubectl delete -f network-delay-tikv-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "partition_pd" ]; then
+		kubectl delete -f network-partition-pd-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "partition_tikv" ]; then
+		kubectl delete -f network-partition-tikv-tiflash.yaml -n "${namespace}"
+	fi
+}
+export -f chaos_delete
+
+function chaos_get()
+{
+	if [ -z "${1+x}" ]; then
+		echo "usage: <func> namespace" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	
+	kubectl get podchaos -n "${namespace}"
+	kubectl get networkchaos -n "${namespace}"
+	kubectl get iochaos -n "${namespace}"
+}
+export -f chaos_apply

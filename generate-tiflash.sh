@@ -1,8 +1,8 @@
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
 source "${here}/_env.sh"
 
-if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ]; then
-	echo "usage: <cmd> namespace tidb-cluster-name tiflash_image sub_dir [storage_class_name]" >&2
+if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ] || [ -z "${5+x}" ]; then
+	echo "usage: <cmd> namespace tidb-cluster-name tiflash_image sub_dir chaos_namespace [storage_class_name]" >&2
 	exit 1
 fi
 
@@ -10,10 +10,11 @@ namespace="${1}"
 tidb_cluster_name="${2}"
 image_tag="${3}"
 sub_dir="${4}"
-if [ -z "${5+x}" ]; then
+chaos_namespace="${5}"
+if [ -z "${6+x}" ]; then
 	storage_class_name="shared-nvme-disks"
 else
-	storage_class_name="${5}"
+	storage_class_name="${6}"
 fi
 
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
@@ -21,7 +22,15 @@ render_str="namespace=${namespace}"
 render_str="${render_str}#tidb_cluster_name=${tidb_cluster_name}"
 render_str="${render_str}#image_tag=${image_tag}"
 render_str="${render_str}#storage_class_name=${storage_class_name}"
+# generate cluster yaml
 render_templ "${here}/cluster-template/tiflash-template.yaml" "${here}/${sub_dir}/tiflash.yaml" "${render_str}"
 render_templ "${here}/cluster-template/tidb-cluster-template.yaml" "${here}/${sub_dir}/tidb-cluster.yaml" "${render_str}"
+
+# copy cluster command
 cp -r ${here}/cluster-commands/* "${here}/${sub_dir}/"
-"${here}/generate-chaos.sh" "${namespace}" "${namespace}" "${sub_dir}"
+echo "${namespace}" > "${here}/${sub_dir}/namespace"
+echo "${tidb_cluster_name}" > "${here}/${sub_dir}/name"
+echo "${chaos_namespace}" > "${here}/${sub_dir}/chaos_namespace"
+
+# generate chaos yaml
+"${here}/generate-chaos.sh" "${namespace}" "${chaos_namespace}" "${sub_dir}"

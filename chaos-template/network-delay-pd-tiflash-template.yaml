@@ -1,8 +1,8 @@
 apiVersion: pingcap.com/v1alpha1
 kind: NetworkChaos
 metadata:
-  name: {prefix}-pd-d
-  namespace: tiflash-chaos
+  name: {chaos_namespace}-pd-d
+  namespace: {chaos_namespace}
 spec:
   action: delay
   mode: all
