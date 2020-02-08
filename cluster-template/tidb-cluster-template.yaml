@@ -1,0 +1,43 @@
+apiVersion: pingcap.com/v1alpha1
+kind: TidbCluster
+metadata:
+  name: {tidb_cluster_name}
+spec:
+  version: v3.1.0-beta.1
+  imagePullPolicy: IfNotPresent
+  pvReclaimPolicy: Delete
+  schedulerName: "tidb-scheduler"
+  timezone: "Asia/Shanghai"
+  pd:
+    baseImage: hub.pingcap.net/tiflash/pd:k8s121001
+    replicas: 3
+    storageClassName: "{storage_class_name}"
+    requests:
+      cpu: 2
+      memory: 2Gi
+      storage: "40Gi"
+    limits:
+      cpu: 2
+      memory: 2Gi
+    config:
+      replication:
+        enable-placement-rules : true
+      schedule:
+        merge-schedule-limit : 0
+  tikv:
+    baseImage: hub.pingcap.net/tiflash/tikv:k8s121803
+    replicas: 3
+    storageClassName: "{storage_class_name}"
+    requests:
+      storage: "80Gi"
+    config:
+      log-level: info
+      raftstore:
+        hibernate-regions : false
+  tidb:
+    baseImage: hub.pingcap.net/tiflash/tidb:k8s120501
+    replicas: 1
+    service:
+      type: NodePort
+    config: {}
+
