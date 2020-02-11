@@ -1,0 +1,3 @@
+apply [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv]: run a chaos experiment
+delete [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv]: delete a chaos experiment
+get: show status about chaos experiments

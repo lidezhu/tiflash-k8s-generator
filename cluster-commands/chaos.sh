@@ -18,6 +18,10 @@ function chaos_command()
 		local chaos_namespace=`cat ./chaos_namespace`
 	fi
 
+	if [ "${command}" == 'show' ]; then
+		local command="get"
+	fi
+
 	kubectl get ns "${chaos_namespace}"
 	if [ "${?}" -ne 0 ]; then
 		kubectl create ns "${chaos_namespace}"

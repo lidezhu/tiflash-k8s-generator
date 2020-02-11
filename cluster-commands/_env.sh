@@ -9,7 +9,7 @@ function help()
 
 	local namespace="${1}"
 	local name="${2}"
-	cat ./help
+	cat ./k8s_help
 }
 
 export -f help
@@ -248,6 +248,20 @@ function port()
 export -f port
 
 # chaos-related func
+function chaos_help()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <cmd>" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	cat ./chaos_help
+}
+
+export -f chaos_help
+
 function chaos_apply()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
@@ -308,9 +322,11 @@ function chaos_get()
 	fi
 
 	local namespace="${1}"
-	
+	echo "PodChaos:"
 	kubectl get podchaos -n "${namespace}"
+	echo "NetworkChaos:"
 	kubectl get networkchaos -n "${namespace}"
+	echo "IOChaos:"
 	kubectl get iochaos -n "${namespace}"
 }
 export -f chaos_apply

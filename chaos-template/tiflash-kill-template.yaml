@@ -1,7 +1,7 @@
 apiVersion: pingcap.com/v1alpha1
 kind: PodChaos
 metadata:
-  name: {chaos_namespace}-tiflash-k
+  name: kill
   namespace: {chaos_namespace}
 spec:
   action: pod-kill
