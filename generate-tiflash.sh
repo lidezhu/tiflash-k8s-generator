@@ -1,16 +1,33 @@
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
 source "${here}/_env.sh"
 
-if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ] || [ -z "${5+x}" ]; then
-	echo "usage: <cmd> namespace tidb-cluster-name tiflash_image sub_dir chaos_namespace [storage_class_name]" >&2
+if [ -z "${1+x}" ]; then
+	echo "usage: <cmd> namespace [tiflash_image] [tidb-cluster-name] [sub_dir] [chaos_namespace] [storage_class_name]" >&2
 	exit 1
 fi
 
 namespace="${1}"
-tidb_cluster_name="${2}"
-image_tag="${3}"
-sub_dir="${4}"
-chaos_namespace="${5}"
+
+if [ -z "${2+x}" ]; then
+	image_tag="k8s20200120"
+else
+	image_tag="${2}"
+fi
+if [ -z "${3+x}" ]; then
+	tidb_cluster_name="${namespace}-cluster"
+else
+	tidb_cluster_name="${3}"
+fi
+if [ -z "${4+x}" ]; then
+	sub_dir="${namespace}"
+else
+	sub_dir="${4}"
+fi
+if [ -z "${5+x}" ]; then
+	chaos_namespace="${namespace}-chaos"
+else
+	chaos_namespace="${5}"
+fi
 if [ -z "${6+x}" ]; then
 	storage_class_name="shared-nvme-disks"
 else
