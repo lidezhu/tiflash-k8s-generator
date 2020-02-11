@@ -1,9 +1,23 @@
 source "`cd $(dirname ${BASH_SOURCE[0]}) && pwd`/_helper.sh"
 
+function help()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <cmd>" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	cat ./help
+}
+
+export -f help
+
 function apply()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
-		echo "usage: <func> namespace name" >&2
+		echo "usage: <cmd>" >&2
 		exit 1
 	fi
 
@@ -41,7 +55,9 @@ function apply()
 
 	kubectl apply -f tiflash.yaml -n "${namespace}"
 	while true; do
-		local tiflash_ready_num=`kubectl get pod -n "${namespace}" | grep pd | grep Running | wc -l`
+		local tiflash_ready_num=`kubectl get pod -n "${namespace}" | \
+			grep tiflash | grep -v pd  | grep -v tikv | grep -v tidb | grep -v discovery | \
+			grep Running | wc -l`
 		if [ "${tiflash_ready_num}" -eq 3 ]; then
 			break
 		fi
@@ -55,7 +71,7 @@ export -f apply
 function clear()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
-		echo "usage: <func> namespace name" >&2
+		echo "usage: <cmd>" >&2
 		exit 1
 	fi
 
@@ -70,7 +86,7 @@ export -f clear
 function delete()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
-		echo "usage: <func> namespace name" >&2
+		echo "usage: <cmd>" >&2
 		exit 1
 	fi
 
@@ -103,7 +119,7 @@ export -f delete
 function show()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
-		echo "usage: <func> namespace name" >&2
+		echo "usage: <cmd>" >&2
 		exit 1
 	fi
 
@@ -117,7 +133,7 @@ export -f show
 function desc()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
-		echo "usage: <func> namespace name mod pod-num" >&2
+		echo "usage: <cmd> mod pod-num" >&2
 		exit 1
 	fi
 
@@ -135,7 +151,7 @@ export -f desc
 function log()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
-		echo "usage: <func> namespace name mod pod-num" >&2
+		echo "usage: <cmd> mod pod-num" >&2
 		exit 1
 	fi
 
@@ -159,7 +175,7 @@ export -f log
 function copy()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ] || [ -z "${5+x}" ] || [ -z "${6+x}" ]; then
-		echo "usage: <func> namespace name mod pod-num container-file-path host-file-path" >&2
+		echo "usage: <cmd> mod pod-num container-file-path host-file-path" >&2
 		exit 1
 	fi
 
@@ -185,7 +201,7 @@ export -f copy
 function exec()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
-		echo "usage: <func> namespace name mod pod-num" >&2
+		echo "usage: <cmd>ß mod pod-num" >&2
 		exit 1
 	fi
 
@@ -209,7 +225,7 @@ export -f exec
 function port()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
-		echo "usage: <func> namespace name mod port" >&2
+		echo "usage: <cmd> mod port" >&2
 		exit 1
 	fi
 
@@ -235,7 +251,7 @@ export -f port
 function chaos_apply()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
-		echo "usage: <func> namespace type" >&2
+		echo "usage: <cmd> type" >&2
 		exit 1
 	fi
 
@@ -261,7 +277,7 @@ export -f chaos_apply
 function chaos_delete()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
-		echo "usage: <func> namespace type" >&2
+		echo "usage: <cmd> type" >&2
 		exit 1
 	fi
 
@@ -287,7 +303,7 @@ export -f chaos_delete
 function chaos_get()
 {
 	if [ -z "${1+x}" ]; then
-		echo "usage: <func> namespace" >&2
+		echo "usage: <cmd>" >&2
 		exit 1
 	fi
 

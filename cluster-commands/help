@@ -1,0 +1,8 @@
+apply/run: run k8s cluster
+delete: delete k8s cluster
+show: show cluster pod
+desc [pd/tikv/tidb/tiflash] [0/1/2]: describe status about a specific pod
+log [pd/tikv/tidb/tiflash] [0/1/2]: show log of a specific pod
+copy [pd/tikv/tidb/tiflash] [0/1/2] [container-path] [host-path]: copy file from container to host
+exec [pd/tikv/tidb/tiflash] [0/1/2]: attach to a specific pod
+port [pd/tidb] [host-port]: port forward host-port to a specific service
