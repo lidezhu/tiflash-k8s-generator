@@ -22,7 +22,7 @@ function chaos_command()
 		local command="get"
 	fi
 
-	kubectl get ns "${chaos_namespace}"
+	kubectl get ns "${chaos_namespace}" >/dev/null 2>&1
 	if [ "${?}" -ne 0 ]; then
 		kubectl create ns "${chaos_namespace}"
 	fi

@@ -60,8 +60,6 @@ spec:
           mountPath: /data
         - name: config
           mountPath: /etc/tiflash
-        - name: logs
-          mountPath: /logs
       # To better support k8s, allow normal log to output stdout,
       # so only the error log tailer is needed
       - name: tiflash-log
@@ -70,25 +68,23 @@ spec:
         - /bin/sh
         - -c
         - |
-          touch /logs/server.log
-          tail -n0 -F /logs/server.log
+          touch /data/logs/server.log
+          tail -n0 -F /data/logs/server.log
         volumeMounts:
-        - name: logs
-          mountPath: /logs
+        - name: data
+          mountPath: /data
       - name: error-log
         image: busybox
         command:
         - /bin/sh
         - -c
         - |
-          touch /logs/error.log
-          tail -n0 -F /logs/error.log
+          touch /data/logs/error.log
+          tail -n0 -F /data/logs/error.log
         volumeMounts:
-        - name: logs
-          mountPath: /logs
+        - name: data
+          mountPath: /data
       volumes:
-      - name: logs
-        emptyDir: {}
       - name: config
         configMap:
           name: tiflash
@@ -107,7 +103,7 @@ spec:
       storageClassName: "{storage_class_name}"
       resources:
         requests:
-          storage: 100Gi
+          storage: 300Gi
 ---
 apiVersion: v1
 kind: Service
@@ -161,14 +157,14 @@ data:
     addr = "0.0.0.0:20170"
     data-dir = "/data/proxy"
     config = "/data/proxy.toml"
-    log-file = "/logs/proxy.log"
+    log-file = "/data/logs/proxy.log"
 
     [logger]
     level = "trace"
-    log = "/logs/server.log"
-    errorlog = "/logs/error.log"
-    size = "4000M"
-    count = 10
+    log = "/data/logs/server.log"
+    errorlog = "/data/logs/error.log"
+    size = "500M"
+    count = 40
 
     [application]
     runAsDaemon = true
