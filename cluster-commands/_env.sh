@@ -20,6 +20,24 @@ function apply()
 		echo "wait for tidb cluster ready"
 		sleep 10
 	done
+	
+	local temp_pd_port=12399
+	local count=`ps -ef | grep port-forward | grep ${temp_pd_port} | wc -l`
+	if [ ${count} != 0 ]; then
+		ps -ef | grep port-forward | grep ${temp_pd_port} | awk '{print $2}' | xargs kill -9
+	fi
+	port "${namespace}" "${name}" "pd" ${temp_pd_port}
+	if [ ! -f "./pd-ctl" ]; then
+		wget http://139.219.11.38:8000/10zs84/pd-ctl.tar.gz
+		tar -zxvf pd-ctl.tar.gz
+	fi
+	while true; do
+		local count=`./pd-ctl -u http://127.0.0.1:${temp_pd_port} config set enable-placement-rules true | grep Failed | wc -l`
+		if [ ${count} == "0" ]; then
+			break
+		fi
+		sleep 10
+	done
 
 	kubectl apply -f tiflash.yaml -n "${namespace}"
 	while true; do
@@ -69,8 +87,8 @@ function delete()
 	sleep 5
 	kubectl delete -f tidb-cluster.yaml -n "${namespace}"
 	while true; do
-		local pod_count=`kubectl get pod -n "${namespace}"
-		if [ "${pod_count}" -eq 0 ]; then
+		local pod_count=`kubectl get pod -n "${namespace}" | wc -l`
+		if [ "${pod_count}" == "0" ]; then
 			break
 		fi
 		echo "wait for all pod terminate"
@@ -110,7 +128,7 @@ function desc()
 
 	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
 
-	kubectl desc pod "${pod_name}" -n "${namespace}"
+	kubectl describe pod "${pod_name}" -n "${namespace}"
 }
 export -f desc
 

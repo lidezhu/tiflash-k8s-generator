@@ -7,15 +7,15 @@ function get_pod_name()
 
 	local namespace="${1}"
 	local name="${2}"
-	local mod="${2}"
-	local pod_num="${2}"
+	local mod="${3}"
+	local pod_num="${4}"
 
 	if [ "${mod}" == "pd" ] || [ "${mod}" == "tikv" ] || [ "${mod}" == "tidb" ]; then
-		local pod_name="${name}-${mod}-${pod_num}"
+		echo "${name}-${mod}-${pod_num}"
 	elif [ "${mod}" == "tiflash" ]; then
-		local pod_nmae="tiflash-${pod_num}"
+		echo "tiflash-${pod_num}"
 	else
-		echo "unknown mod name" >&2
+		echo "[func get_pod_name] unknown mod name ${mod}" >&2
 		exit 1
 	fi
 }
