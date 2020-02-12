@@ -35,7 +35,7 @@ else
 fi
 
 schrodinger_tag="k8s20200212"
-test_namespace="test_${namespace}"
+test_namespace="${namespace}-test"
 
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
 render_str="namespace=${namespace}"
