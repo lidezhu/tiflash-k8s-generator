@@ -12,11 +12,11 @@ function test_command()
 
 	shift 1
 
-	if [ ! -f "./namespace" ]; then
-		echo "namespace file not found"
+	if [ ! -f "./test_namespace" ]; then
+		echo "test namespace file not found"
 		exit 1
 	else
-		local namespace=`cat ./namespace`
+		local namespace=`cat ./test_namespace`
 	fi
 
 	kubectl get ns "${namespace}" >/dev/null 2>&1

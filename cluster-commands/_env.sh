@@ -314,7 +314,7 @@ function chaos_delete()
 }
 export -f chaos_delete
 
-function chaos_get()
+function chaos_show()
 {
 	if [ -z "${1+x}" ]; then
 		echo "usage: <cmd>" >&2
@@ -329,9 +329,61 @@ function chaos_get()
 	echo "IOChaos:"
 	kubectl get iochaos -n "${namespace}"
 }
-export -f chaos_apply
+export -f chaos_show
 
-function test_bank()
+function test_apply()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <cmd> [bank/bank2/crud/ledger/sqllogic/ddl]" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local test="${2}"
+
+	if [ "${test}" == "bank" ]; then
+		kubectl apply -f bank.yaml -n "${namespace}"
+	else if [ "${test}" == "bank2" ]; then
+		kubectl apply -f bank2.yaml -n "${namespace}"
+	else if [ "${test}" == "crud" ]; then
+		kubectl apply -f crud.yaml -n "${namespace}"
+	else if [ "${test}" == "ledger" ]; then
+		kubectl apply -f ledger.yaml -n "${namespace}"
+	else if [ "${test}" == "sqllogic" ]; then
+		kubectl apply -f sqllogic.yaml -n "${namespace}"
+	else if [ "${test}" == "ddl" ]; then
+		kubectl apply -f ddl.yaml -n "${namespace}"
+	fi
+}
+export -f test_apply
+
+function test_delete()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <cmd> [bank/bank2/crud/ledger/sqllogic/ddl]" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local test="${2}"
+
+	if [ "${test}" == "bank" ]; then
+		kubectl delete -f bank.yaml -n "${namespace}"
+	else if [ "${test}" == "bank2" ]; then
+		kubectl delete -f bank2.yaml -n "${namespace}"
+	else if [ "${test}" == "crud" ]; then
+		kubectl delete -f crud.yaml -n "${namespace}"
+	else if [ "${test}" == "ledger" ]; then
+		kubectl delete -f ledger.yaml -n "${namespace}"
+	else if [ "${test}" == "sqllogic" ]; then
+		kubectl delete -f sqllogic.yaml -n "${namespace}"
+	else if [ "${test}" == "ddl" ]; then
+		kubectl delete -f ddl.yaml -n "${namespace}"
+	fi
+}
+export -f test_delete
+
+function test_show()
 {
 	if [ -z "${1+x}" ]; then
 		echo "usage: <cmd>" >&2
@@ -340,6 +392,6 @@ function test_bank()
 
 	local namespace="${1}"
 	
-	kubectl apply -f bank.yaml -n "${namespace}"
+	kubectl get pod -n "${namespace}"
 }
-export -f test_bank
+export -f test_show

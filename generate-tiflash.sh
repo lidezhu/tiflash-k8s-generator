@@ -35,6 +35,7 @@ else
 fi
 
 schrodinger_tag="k8s20200212"
+test_namespace="test_${namespace}"
 
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
 render_str="namespace=${namespace}"
@@ -42,17 +43,24 @@ render_str="${render_str}#tidb_cluster_name=${tidb_cluster_name}"
 render_str="${render_str}#image_tag=${image_tag}"
 render_str="${render_str}#storage_class_name=${storage_class_name}"
 render_str="${render_str}#schrodinger_tag=${schrodinger_tag}"
+render_str="${render_str}#test_namespace=${test_namespace}"
 # generate cluster yaml
 render_templ "${here}/cluster-template/tiflash-template.yaml" "${here}/${sub_dir}/tiflash.yaml" "${render_str}"
 render_templ "${here}/cluster-template/tidb-cluster-template.yaml" "${here}/${sub_dir}/tidb-cluster.yaml" "${render_str}"
 
 # generate schrodinger yaml
 render_templ "${here}/schrodinger-template/bank-template.yaml" "${here}/${sub_dir}/bank.yaml" "${render_str}"
+render_templ "${here}/schrodinger-template/bank2-template.yaml" "${here}/${sub_dir}/bank2.yaml" "${render_str}"
+render_templ "${here}/schrodinger-template/crud-template.yaml" "${here}/${sub_dir}/crud.yaml" "${render_str}"
+render_templ "${here}/schrodinger-template/ledger-template.yaml" "${here}/${sub_dir}/ledger.yaml" "${render_str}"
+render_templ "${here}/schrodinger-template/ddl-template.yaml" "${here}/${sub_dir}/ddl.yaml" "${render_str}"
+render_templ "${here}/schrodinger-template/sqllogic-template.yaml" "${here}/${sub_dir}/sqllogic.yaml" "${render_str}"
 
 # copy cluster command
 cp -r ${here}/cluster-commands/* "${here}/${sub_dir}/"
 echo "${namespace}" > "${here}/${sub_dir}/namespace"
 echo "${tidb_cluster_name}" > "${here}/${sub_dir}/name"
+echo "${test_namespace}" > "${here}/${sub_dir}/test_namespace"
 echo "${chaos_namespace}" > "${here}/${sub_dir}/chaos_namespace"
 
 # generate chaos yaml
