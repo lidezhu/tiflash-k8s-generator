@@ -34,7 +34,7 @@ else
 	storage_class_name="${6}"
 fi
 
-schrodinger_tag="todo"
+schrodinger_tag="k8s20200212"
 
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
 render_str="namespace=${namespace}"
