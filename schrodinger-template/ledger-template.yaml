@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: bank
+  name: ledger
 spec:
   containers:
-    - name: bank-container
+    - name: ledger-container
       image: hub.pingcap.net/tiflash/schrodinger:{schrodinger_tag}
       command:
       - bash
