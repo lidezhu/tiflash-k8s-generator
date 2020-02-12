@@ -387,6 +387,34 @@ function test_delete()
 }
 export -f test_delete
 
+function test_log()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+		echo "usage: <cmd> [bank/bank2/crud/ledger/sqllogic/ddl]" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local test="${2}"
+
+	if [ "${test}" == "bank" ]; then
+		kubectl logs bank -n "${namespace}"
+	elif [ "${test}" == "bank2" ]; then
+		kubectl logs bank2 -n "${namespace}"
+	elif [ "${test}" == "crud" ]; then
+		kubectl logs crud -n "${namespace}"
+	elif [ "${test}" == "ledger" ]; then
+		kubectl logs ledger -n "${namespace}"
+	elif [ "${test}" == "sqllogic" ]; then
+		kubectl logs sqllogic -n "${namespace}"
+	elif [ "${test}" == "ddl" ]; then
+		kubectl logs ddl -n "${namespace}"
+	else
+		echo "<apply> unknown test ${test}"
+	fi
+}
+export -f test_log
+
 function test_show()
 {
 	if [ -z "${1+x}" ]; then
