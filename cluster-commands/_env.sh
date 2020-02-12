@@ -284,6 +284,11 @@ function chaos_apply()
 		kubectl apply -f network-partition-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition_tikv" ]; then
 		kubectl apply -f network-partition-tikv-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "delay" ]; then
+		kubectl apply -f io-delay.yaml -n "${namespace}"
+	else
+		echo "<apply> unknown chaos test: ${type}" >&2
+		exit 1
 	fi
 }
 export -f chaos_apply
@@ -310,6 +315,11 @@ function chaos_delete()
 		kubectl delete -f network-partition-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition_tikv" ]; then
 		kubectl delete -f network-partition-tikv-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "delay" ]; then
+		kubectl delete -f io-delay.yaml -n "${namespace}"
+	else
+		echo "<apply> unknown chaos test: ${type}" >&2
+		exit 1
 	fi
 }
 export -f chaos_delete

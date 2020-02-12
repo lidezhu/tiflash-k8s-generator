@@ -1,0 +1,19 @@
+kind: IoChaos
+metadata:
+  name: delay
+  namespace: {chaos_namespace}
+spec:
+  action: delay
+  mode: one
+  duration: "400s"
+  configName: "chaosfs-tiflash"
+  path: ""
+  selector:
+    namespaces:
+      - {namespace}
+    labelSelectors:
+      "app": "tiflash"
+  layer: "fs"
+  delay: "10ms"
+  scheduler:
+    cron: "@every 10m"
