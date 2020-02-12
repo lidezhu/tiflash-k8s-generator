@@ -34,14 +34,20 @@ else
 	storage_class_name="${6}"
 fi
 
+schrodinger_tag="todo"
+
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
 render_str="namespace=${namespace}"
 render_str="${render_str}#tidb_cluster_name=${tidb_cluster_name}"
 render_str="${render_str}#image_tag=${image_tag}"
 render_str="${render_str}#storage_class_name=${storage_class_name}"
+render_str="${render_str}#schrodinger_tag=${schrodinger_tag}"
 # generate cluster yaml
 render_templ "${here}/cluster-template/tiflash-template.yaml" "${here}/${sub_dir}/tiflash.yaml" "${render_str}"
 render_templ "${here}/cluster-template/tidb-cluster-template.yaml" "${here}/${sub_dir}/tidb-cluster.yaml" "${render_str}"
+
+# generate schrodinger yaml
+render_templ "${here}/schrodinger-template/bank-template.yaml" "${here}/${sub_dir}/bank.yaml" "${render_str}"
 
 # copy cluster command
 cp -r ${here}/cluster-commands/* "${here}/${sub_dir}/"

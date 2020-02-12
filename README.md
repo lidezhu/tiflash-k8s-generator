@@ -1,7 +1,7 @@
 # The guide to build tiflash k8s cluster and test it using chaos-mesh
 
 ## Install tiflash cluster
-* Generate cluster and chaos related yaml file: `./generate-tiflash.sh [namespace] [tidb-cluster-name] [tiflash_image] [sub_dir] [chaos_namespace]`(Caution: pick unique namespace and don't include words [tidb/pd/tikv] in cluster name)
+* Generate cluster and chaos related yaml file: `./generate-tiflash.sh namespace [tiflash_image] [tidb-cluster-name] [sub_dir] [chaos_namespace] [storage_class_name]`(Caution: pick unique namespace and don't include words [tidb/pd/tikv] in cluster name)
 * Install tidb and tiflash cluster: 
 ```
 cd [sub_dir]
@@ -20,5 +20,5 @@ cd [sub_dir]
 
 ## Using chaos-mesh to test
 * `./chaos.sh apply [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv]` apply a specific chaos experiment
-* `./chaos.sh get` show all chaos experiment
+* `./chaos.sh show` show all chaos experiment
 * `./chaos.sh delete [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv]` delete a specific chaos experiment

@@ -215,7 +215,7 @@ function exec()
 	if [ "${mod}" == "tidb" ]; then
 		kubectl exec -it "${pod_name}" -c tidb -n "${namespace}" /bin/sh
 	elif [ "${mod}" == "tiflash" ]; then
-		kubectl exec -it "${pod_name}" -c tiflash-log -n "${namespace}" /bin/bash
+		kubectl exec -it "${pod_name}" -c tiflash -n "${namespace}" /bin/bash
 	else
 		kubectl exec -it "${pod_name}" -n "${namespace}" /bin/sh
 	fi
@@ -330,3 +330,16 @@ function chaos_get()
 	kubectl get iochaos -n "${namespace}"
 }
 export -f chaos_apply
+
+function test_bank()
+{
+	if [ -z "${1+x}" ]; then
+		echo "usage: <cmd>" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	
+	kubectl apply -f bank.yaml -n "${namespace}"
+}
+export -f test_bank

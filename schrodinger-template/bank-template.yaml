@@ -1,0 +1,15 @@
+apiVersion: apps/v1
+kind: Pod
+metadata:
+  name: bank
+spec:
+  containers:
+    - name: bank-container
+      image: hub.pingcap.net/tiflash/schrodinger:{schrodinger_tag}
+      command:
+      - bash
+      - "-c"
+      - |
+        export TIDB_SERVICE="{tidb_cluster_name}-tidb.{namespace}.svc:4000"
+        /bank
+      
