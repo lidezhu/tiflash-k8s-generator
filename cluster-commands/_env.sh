@@ -343,16 +343,18 @@ function test_apply()
 
 	if [ "${test}" == "bank" ]; then
 		kubectl apply -f bank.yaml -n "${namespace}"
-	else if [ "${test}" == "bank2" ]; then
+	elif [ "${test}" == "bank2" ]; then
 		kubectl apply -f bank2.yaml -n "${namespace}"
-	else if [ "${test}" == "crud" ]; then
+	elif [ "${test}" == "crud" ]; then
 		kubectl apply -f crud.yaml -n "${namespace}"
-	else if [ "${test}" == "ledger" ]; then
+	elif [ "${test}" == "ledger" ]; then
 		kubectl apply -f ledger.yaml -n "${namespace}"
-	else if [ "${test}" == "sqllogic" ]; then
+	elif [ "${test}" == "sqllogic" ]; then
 		kubectl apply -f sqllogic.yaml -n "${namespace}"
-	else if [ "${test}" == "ddl" ]; then
+	elif [ "${test}" == "ddl" ]; then
 		kubectl apply -f ddl.yaml -n "${namespace}"
+	else
+		echo "<apply> unknown test ${test}"
 	fi
 }
 export -f test_apply
@@ -369,16 +371,18 @@ function test_delete()
 
 	if [ "${test}" == "bank" ]; then
 		kubectl delete -f bank.yaml -n "${namespace}"
-	else if [ "${test}" == "bank2" ]; then
+	elif [ "${test}" == "bank2" ]; then
 		kubectl delete -f bank2.yaml -n "${namespace}"
-	else if [ "${test}" == "crud" ]; then
+	elif [ "${test}" == "crud" ]; then
 		kubectl delete -f crud.yaml -n "${namespace}"
-	else if [ "${test}" == "ledger" ]; then
+	elif [ "${test}" == "ledger" ]; then
 		kubectl delete -f ledger.yaml -n "${namespace}"
-	else if [ "${test}" == "sqllogic" ]; then
+	elif [ "${test}" == "sqllogic" ]; then
 		kubectl delete -f sqllogic.yaml -n "${namespace}"
-	else if [ "${test}" == "ddl" ]; then
+	elif [ "${test}" == "ddl" ]; then
 		kubectl delete -f ddl.yaml -n "${namespace}"
+	else
+		echo "<apply> unknown test ${test}"
 	fi
 }
 export -f test_delete
