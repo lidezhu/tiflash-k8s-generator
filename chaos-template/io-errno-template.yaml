@@ -1,10 +1,10 @@
 apiVersion: pingcap.com/v1alpha1
 kind: IoChaos
 metadata:
-  name: delay
+  name: mixed
   namespace: {chaos_namespace}
 spec:
-  action: delay
+  action: mixed
   mode: one
   duration: "400s"
   configName: "chaosfs-tiflash"
@@ -15,6 +15,7 @@ spec:
     labelSelectors:
       "app": "tiflash"
   layer: "fs"
-  delay: "10ms"
+  percent: "50"
+  delay: "1ms"
   scheduler:
     cron: "@every 10m"

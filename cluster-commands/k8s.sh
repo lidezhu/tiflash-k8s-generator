@@ -1,6 +1,5 @@
 source "`cd $(dirname ${BASH_SOURCE[0]}) && pwd`/_env.sh"
 
-
 function k8s_command()
 {
 	if [ -z "${1+x}" ] || [ -z "${1}" ]; then
