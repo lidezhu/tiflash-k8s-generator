@@ -1,15 +1,14 @@
 # The guide to build tiflash k8s cluster and test it using chaos-mesh
 
-## Install tiflash cluster
+## Generate file
 * Generate cluster and chaos related yaml file: `./generate-tiflash.sh namespace [tiflash_image] [tidb-cluster-name] [sub_dir] [chaos_namespace] [storage_class_name]`(Caution: pick unique namespace and don't include words [tidb/pd/tikv] in cluster name)
-* Install tidb and tiflash cluster: 
-```
-cd [sub_dir]
-./k8s.sh apply
-```
+* Change to working directory: `cd [sub_dir]`
 
-## Prepare
-If you want to run io chaos experiment on the cluster, you must run `./prepare_io_chaos.sh` before start the cluster.
+## Before install cluster
+* If you want to run io chaos experiment on the cluster, you must run `./prepare_io_chaos.sh` before start the cluster
+
+## Install tiflash cluster
+* Install tidb and tiflash cluster: `./k8s.sh apply`
 
 ## Manipulate tiflash cluster
 * `./k8s.sh delete [true/false]` delete cluster (true means clear cluster's data, the default is true)
