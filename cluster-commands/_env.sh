@@ -159,13 +159,22 @@ function logs()
 	local name="${2}"
 	local mod="${3}"
 	local pod_num="${4}"
+	if [ -z "${5+x}" ]; then
+		local container=""
+	else
+		local container="${5}"
+	fi
 
 	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
 
 	if [ "${mod}" == "tidb" ]; then
 		kubectl logs "${pod_name}" -c tidb -n "${namespace}"
 	elif [ "${mod}" == "tiflash" ]; then
-		kubectl logs "${pod_name}" -c tiflash-log -n "${namespace}"
+		if [ "${container}" != "" ]; then
+			kubectl logs "${pod_name}" -c "${container}" -n "${namespace}"
+		else 
+			kubectl logs "${pod_name}" -c tiflash-log -n "${namespace}"
+		fi
 	else
 		kubectl logs "${pod_name}" -n "${namespace}"
 	fi
@@ -331,26 +340,6 @@ function chaos_delete()
 	fi
 }
 export -f chaos_delete
-
-function chaos_logs()
-{
-	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ]; then
-		echo "usage: <cmd> type pod_num" >&2
-		exit 1
-	fi
-
-	local namespace="${1}"
-	local type="${2}"
-	local pod_num="${3}"
-
-	if [ "${type}" == "delay" ] ||  [ "${type}" == "errno" ] || [ "${type}" == "mixed" ]; then
-		kubectl logs tiflash-${pod_num} -c chaosfs -n "${namespace}"
-	else
-		echo "<apply> unsupported chaos test: ${type}" >&2
-		exit 1
-	fi
-}
-export -f chaos_logs
 
 function chaos_show()
 {
