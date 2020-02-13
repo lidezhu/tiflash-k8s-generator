@@ -168,7 +168,11 @@ function logs()
 	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
 
 	if [ "${mod}" == "tidb" ]; then
-		kubectl logs "${pod_name}" -c tidb -n "${namespace}"
+		if [ "${container}" != "" ]; then
+			kubectl logs "${pod_name}" -c "${container}" -n "${namespace}"
+		else 
+			kubectl logs "${pod_name}" -c tidb -n "${namespace}"
+		fi
 	elif [ "${mod}" == "tiflash" ]; then
 		if [ "${container}" != "" ]; then
 			kubectl logs "${pod_name}" -c "${container}" -n "${namespace}"

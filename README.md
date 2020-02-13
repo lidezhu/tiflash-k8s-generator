@@ -16,16 +16,16 @@ If you want to run io chaos experiment on the cluster, you must run `./prepare_i
 * `./k8s.sh clear` clear cluster data
 * `./k8s.sh show` show cluster pod
 * `./k8s.sh desc [pd/tikv/tidb/tiflash] [pod-num]` describe pod status
-* `./k8s.sh log [pd/tikv/tidb/tiflash] [pod-num]` show logs of specific pod
+* `./k8s.sh logs [pd/tikv/tidb/tiflash] [pod-num] [container-name]` show logs of specific pod
 * `./k8s.sh copy [pd/tikv/tidb/tiflash] [pod-num] [container file path] [host file path]` copy file from container to host
 * `./k8s.sh exec [pd/tikv/tidb/tiflash] [pod-num]` attach to a specific pod
-* `./k8s.sh port [pd/tidb] [host-port]` port forward host-port to a specific service port
+* `./k8s.sh port [pd/tidb] [host-port]` port forward `host-port` to a specific service port(tidb: 4000, pd: 2399)
 
 ## Run schrodinger test
 * `./k8s.sh apply [bank/bank2/crud/ledger/sqllogic/ddl]` run schrodinger test
 * `./k8s.sh delete [bank/bank2/crud/ledger/sqllogic/ddl]` delete schrodinger test
-* `./k8s.sh log [bank/bank2/crud/ledger/sqllogic/ddl]` show schrodinger test log
-* `./k8s.sh show` run schrodinger test
+* `./k8s.sh logs [bank/bank2/crud/ledger/sqllogic/ddl]` show schrodinger test log
+* `./k8s.sh show` show running schrodinger test
 
 ## Using chaos-mesh to test
 * `./chaos.sh apply [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv/delay/errno/mixed]` apply a specific chaos experiment
