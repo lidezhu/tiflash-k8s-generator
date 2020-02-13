@@ -332,6 +332,26 @@ function chaos_delete()
 }
 export -f chaos_delete
 
+function chaos_logs()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ]; then
+		echo "usage: <cmd> type pod_num" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local type="${2}"
+	local pod_num="${3}"
+
+	if [ "${type}" == "delay" ] ||  [ "${type}" == "errno" ] || [ "${type}" == "mixed" ]; then
+		kubectl logs tiflash-${pod_num} -c chaosfs -n "${namespace}"
+	else
+		echo "<apply> unsupported chaos test: ${type}" >&2
+		exit 1
+	fi
+}
+export -f chaos_logs
+
 function chaos_show()
 {
 	if [ -z "${1+x}" ]; then
