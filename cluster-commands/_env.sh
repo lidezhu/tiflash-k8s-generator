@@ -170,7 +170,7 @@ function logs()
 		kubectl logs "${pod_name}" -n "${namespace}"
 	fi
 }
-export -f log
+export -f logs
 
 function copy()
 {
@@ -431,7 +431,7 @@ function test_logs()
 		echo "<apply> unknown test ${test}"
 	fi
 }
-export -f test_log
+export -f test_logs
 
 function test_show()
 {
