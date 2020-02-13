@@ -148,7 +148,7 @@ function desc()
 }
 export -f desc
 
-function log()
+function logs()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
 		echo "usage: <cmd> mod pod-num" >&2
@@ -405,7 +405,7 @@ function test_delete()
 }
 export -f test_delete
 
-function test_log()
+function test_logs()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
 		echo "usage: <cmd> [bank/bank2/crud/ledger/sqllogic/ddl]" >&2
