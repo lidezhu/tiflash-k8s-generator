@@ -1,10 +1,10 @@
 apiVersion: pingcap.com/v1alpha1
 kind: IoChaos
 metadata:
-  name: mixed
+  name: errno
   namespace: {chaos_namespace}
 spec:
-  action: mixed
+  action: errno
   mode: one
   duration: "400s"
   configName: "chaosfs-tiflash"
@@ -16,6 +16,5 @@ spec:
       "app": "tiflash"
   layer: "fs"
   percent: "50"
-  delay: "1ms"
   scheduler:
     cron: "@every 10m"
