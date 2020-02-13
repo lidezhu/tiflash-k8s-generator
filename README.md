@@ -21,10 +21,10 @@
 * `./k8s.sh port [pd/tidb] [host-port]` port forward `host-port` to a specific service port(tidb: 4000, pd: 2399)
 
 ## Run schrodinger test
-* `./k8s.sh apply [bank/bank2/crud/ledger/sqllogic/ddl]` run schrodinger test
-* `./k8s.sh delete [bank/bank2/crud/ledger/sqllogic/ddl]` delete schrodinger test
-* `./k8s.sh logs [bank/bank2/crud/ledger/sqllogic/ddl]` show schrodinger test log
-* `./k8s.sh show` show running schrodinger test
+* `./test.sh apply [bank/bank2/crud/ledger/sqllogic/ddl]` run schrodinger test
+* `./test.sh delete [bank/bank2/crud/ledger/sqllogic/ddl]` delete schrodinger test
+* `./test.sh logs [bank/bank2/crud/ledger/sqllogic/ddl]` show schrodinger test log
+* `./test.sh show` show running schrodinger test
 
 ## Using chaos-mesh to test
 * `./chaos.sh apply [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv/delay/errno/mixed]` apply a specific chaos experiment
