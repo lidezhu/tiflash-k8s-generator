@@ -8,6 +8,9 @@ cd [sub_dir]
 ./k8s.sh apply
 ```
 
+## Prepare
+If you want to run io chaos experiment on the cluster, you must run `./prepare_io_chaos.sh` before start the cluster.
+
 ## Manipulate tiflash cluster
 * `./k8s.sh delete [true/false]` delete cluster (true means clear cluster's data, the default is true)
 * `./k8s.sh clear` clear cluster data
