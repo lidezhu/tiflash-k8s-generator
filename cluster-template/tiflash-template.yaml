@@ -163,8 +163,8 @@ data:
     level = "trace"
     log = "/data/logs/server.log"
     errorlog = "/data/logs/error.log"
-    size = "500M"
-    count = 40
+    size = "4000M"
+    count = 10
 
     [application]
     runAsDaemon = true
