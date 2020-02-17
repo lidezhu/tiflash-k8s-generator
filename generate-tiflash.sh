@@ -46,6 +46,7 @@ render_str="${render_str}#schrodinger_tag=${schrodinger_tag}"
 render_str="${render_str}#test_namespace=${test_namespace}"
 # generate cluster yaml
 render_templ "${here}/cluster-template/tiflash-template.yaml" "${here}/${sub_dir}/tiflash.yaml" "${render_str}"
+render_templ "${here}/cluster-template/tiflash-multi-disk-template.yaml" "${here}/${sub_dir}/tiflash-multi-disk.yaml" "${render_str}"
 render_templ "${here}/cluster-template/tidb-cluster-template.yaml" "${here}/${sub_dir}/tidb-cluster.yaml" "${render_str}"
 
 # generate schrodinger yaml
