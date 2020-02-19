@@ -10,7 +10,7 @@ spec:
     matchLabels:
       app: tiflash
   serviceName: tiflash
-  replicas: 3
+  replicas: 1
   template:
     metadata:
       labels:

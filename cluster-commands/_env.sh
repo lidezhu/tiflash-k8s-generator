@@ -58,7 +58,7 @@ function apply()
 		local tiflash_ready_num=`kubectl get pod -n "${namespace}" | \
 			grep tiflash | grep -v pd  | grep -v tikv | grep -v tidb | grep -v discovery | \
 			grep Running | wc -l`
-		if [ "${tiflash_ready_num}" -eq 3 ]; then
+		if [ "${tiflash_ready_num}" -eq 2 ]; then
 			break
 		fi
 		echo "wait for tiflash pod ready"
