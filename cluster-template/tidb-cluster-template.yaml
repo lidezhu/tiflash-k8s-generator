@@ -4,12 +4,12 @@ metadata:
   name: {tidb_cluster_name}
 spec:
   version: v3.1.0-beta.1
-  imagePullPolicy: IfNotPresent
+  imagePullPolicy: Always
   pvReclaimPolicy: Delete
   schedulerName: "tidb-scheduler"
   timezone: "Asia/Shanghai"
   pd:
-    image: hub.pingcap.net/tiflash/pd:k8s030701
+    image: hub.pingcap.net/pingcap/pd:k8s030701
     replicas: 3
     storageClassName: "{storage_class_name}"
     requests:
@@ -25,7 +25,7 @@ spec:
       schedule:
         merge-schedule-limit : 0
   tikv:
-    image: hub.pingcap.net/tiflash/tikv:k8s0307
+    image: hub.pingcap.net/pingcap/tikv:k8s0307
     replicas: 3
     storageClassName: "{storage_class_name}"
     requests:
