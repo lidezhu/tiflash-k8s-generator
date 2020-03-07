@@ -35,7 +35,7 @@ spec:
       raftstore:
         hibernate-regions : false
   tidb:
-    image: hub.pingcap.net/pingcap/tidb:k8s0307
+    image: hub.pingcap.net/tiflash/tidb:k8s0307
     replicas: 1
     service:
       type: NodePort
