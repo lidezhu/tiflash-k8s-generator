@@ -3,7 +3,6 @@ kind: TidbCluster
 metadata:
   name: {tidb_cluster_name}
 spec:
-  version: v3.1.0-beta.1
   imagePullPolicy: Always
   pvReclaimPolicy: Delete
   schedulerName: "tidb-scheduler"
