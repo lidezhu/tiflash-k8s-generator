@@ -9,7 +9,7 @@ spec:
   schedulerName: "tidb-scheduler"
   timezone: "Asia/Shanghai"
   pd:
-    image: hub.pingcap.net/tiflash/pd:824ae7f
+    image: hub.pingcap.net/tiflash/pd:k8s030701
     replicas: 3
     storageClassName: "{storage_class_name}"
     requests:
@@ -25,7 +25,7 @@ spec:
       schedule:
         merge-schedule-limit : 0
   tikv:
-    image: hub.pingcap.net/tiflash/tikv:d1f9d48
+    image: hub.pingcap.net/tiflash/tikv:k8s0307
     replicas: 3
     storageClassName: "{storage_class_name}"
     requests:
@@ -35,7 +35,7 @@ spec:
       raftstore:
         hibernate-regions : false
   tidb:
-    image: hub.pingcap.net/pingcap/tidb:28c9efc
+    image: hub.pingcap.net/pingcap/tidb:k8s0307
     replicas: 1
     service:
       type: NodePort
