@@ -8,30 +8,32 @@ fi
 
 namespace="${1}"
 
-if [ -z "${2+x}" ]; then
+shift 1
+
+if [ -z "${1+x}" ]; then
 	image_tag="k8s72c54b"
 else
-	image_tag="${2}"
+	image_tag="${1}"
 fi
-if [ -z "${3+x}" ]; then
+if [ -z "${2+x}" ]; then
 	tidb_cluster_name="${namespace}-cluster"
 else
-	tidb_cluster_name="${3}"
+	tidb_cluster_name="${2}"
 fi
-if [ -z "${4+x}" ]; then
+if [ -z "${3+x}" ]; then
 	sub_dir="${namespace}"
 else
-	sub_dir="${4}"
+	sub_dir="${3}"
 fi
-if [ -z "${5+x}" ]; then
+if [ -z "${4+x}" ]; then
 	chaos_namespace="${namespace}-chaos"
 else
-	chaos_namespace="${5}"
+	chaos_namespace="${4}"
 fi
-if [ -z "${6+x}" ]; then
+if [ -z "${5+x}" ]; then
 	storage_class_name="shared-nvme-disks"
 else
-	storage_class_name="${6}"
+	storage_class_name="${5}"
 fi
 
 schrodinger_tag="k8s20200307"
@@ -47,7 +49,8 @@ render_str="${render_str}#test_namespace=${test_namespace}"
 # generate cluster yaml
 render_templ "${here}/cluster-template/tiflash-template.yaml" "${here}/${sub_dir}/tiflash.yaml" "${render_str}"
 render_templ "${here}/cluster-template/tiflash-multi-disk-template.yaml" "${here}/${sub_dir}/tiflash-multi-disk.yaml" "${render_str}"
-render_templ "${here}/cluster-template/tidb-cluster-template.yaml" "${here}/${sub_dir}/tidb-cluster.yaml" "${render_str}"
+cp -r ${here}/cluster-template/tidb-cluster "${here}/${sub_dir}/"
+#render_templ "${here}/cluster-template/tidb-cluster-template.yaml" "${here}/${sub_dir}/tidb-cluster.yaml" "${render_str}"
 
 # generate schrodinger yaml
 render_templ "${here}/schrodinger-template/bank-template.yaml" "${here}/${sub_dir}/bank.yaml" "${render_str}"

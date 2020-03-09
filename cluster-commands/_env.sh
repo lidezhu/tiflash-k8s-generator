@@ -23,7 +23,7 @@ function apply()
 
 	local namespace="${1}"
 	local name="${2}"
-	kubectl apply -f tidb-cluster.yaml -n "${namespace}"
+	helm install --values=values.yaml --name="${name}" --namespace="${namespace}" ./tidb-cluster/
 	while true; do
 		local pd_ready_num=`kubectl get pod -n "${namespace}" | grep pd | grep Running | wc -l`
 		local tikv_ready_num=`kubectl get pod -n "${namespace}" | grep tikv | grep Running | wc -l`
@@ -31,25 +31,7 @@ function apply()
 		if [ "${pd_ready_num}" -eq 3 ] && [ "${tikv_ready_num}" -eq 3 ] && [ "${tidb_ready_num}" -eq 1 ]; then
 			break
 		fi
-		echo "wait for tidb cluster ready"
-		sleep 10
-	done
-	
-	local temp_pd_port=12399
-	local count=`ps -ef | grep port-forward | grep ${temp_pd_port} | wc -l`
-	if [ ${count} != 0 ]; then
-		ps -ef | grep port-forward | grep ${temp_pd_port} | awk '{print $2}' | xargs kill -9
-	fi
-	port "${namespace}" "${name}" "pd" ${temp_pd_port}
-	if [ ! -f "./pd-ctl" ]; then
-		wget http://139.219.11.38:8000/10zs84/pd-ctl.tar.gz
-		tar -zxvf pd-ctl.tar.gz
-	fi
-	while true; do
-		local count=`./pd-ctl -u http://127.0.0.1:${temp_pd_port} config set enable-placement-rules true | grep Failed | wc -l`
-		if [ ${count} == "0" ]; then
-			break
-		fi
+		echo "wait for tidb cluster ready, pd_ready_num: ${pd_ready_num}, tikv_ready_num: ${tikv_ready_num}, tidb_ready_num: ${tidb_ready_num}"
 		sleep 10
 	done
 
@@ -101,7 +83,7 @@ function delete()
 
 	kubectl delete -f tiflash.yaml -n "${namespace}"
 	sleep 5
-	kubectl delete -f tidb-cluster.yaml -n "${namespace}"
+	helm del --purge "${name}"
 	while true; do
 		local pod_count=`kubectl get pod -n "${namespace}" | wc -l`
 		if [ "${pod_count}" == "0" ]; then
