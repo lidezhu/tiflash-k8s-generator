@@ -3,13 +3,12 @@ kind: TidbCluster
 metadata:
   name: {tidb_cluster_name}
 spec:
-  version: v3.1.0-beta.1
   imagePullPolicy: IfNotPresent
   pvReclaimPolicy: Delete
   schedulerName: "tidb-scheduler"
   timezone: "Asia/Shanghai"
   pd:
-    image: hub.pingcap.net/tiflash/pd:824ae7f
+    image: hub.pingcap.net/tiflash/pd:k8s20200309
     replicas: 3
     storageClassName: "{storage_class_name}"
     requests:
@@ -25,7 +24,7 @@ spec:
       schedule:
         merge-schedule-limit : 0
   tikv:
-    image: hub.pingcap.net/tiflash/tikv:d1f9d48
+    image: hub.pingcap.net/tiflash/tikv:k8s20200309
     replicas: 3
     storageClassName: "{storage_class_name}"
     requests:
@@ -35,7 +34,7 @@ spec:
       raftstore:
         hibernate-regions : false
   tidb:
-    image: hub.pingcap.net/pingcap/tidb:28c9efc
+    image: hub.pingcap.net/tiflash/tidb:k8s20200309
     replicas: 1
     service:
       type: NodePort

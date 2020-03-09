@@ -9,7 +9,7 @@ fi
 namespace="${1}"
 
 if [ -z "${2+x}" ]; then
-	image_tag="k8s9652ba9"
+	image_tag="k8s72c54b"
 else
 	image_tag="${2}"
 fi
