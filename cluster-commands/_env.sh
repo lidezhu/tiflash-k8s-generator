@@ -23,7 +23,7 @@ function apply()
 
 	local namespace="${1}"
 	local name="${2}"
-	helm install --values=values.yaml --name="${name}" --namespace="${namespace}" ./tidb-cluster/
+	helm install --values=values.yaml --name="${name}" --namespace="${namespace}" .
 	while true; do
 		local pd_ready_num=`kubectl get pod -n "${namespace}" | grep pd | grep Running | wc -l`
 		local tikv_ready_num=`kubectl get pod -n "${namespace}" | grep tikv | grep Running | wc -l`
