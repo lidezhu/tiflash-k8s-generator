@@ -39,7 +39,7 @@ function apply()
 	while true; do
 		local tiflash_ready_num=`kubectl get pod -n "${namespace}" | \
 			grep tiflash | grep -v pd  | grep -v tikv | grep -v tidb | grep -v discovery | \
-			grep Running | wc -l`
+			grep -v monitor | grep Running | wc -l`
 		if [ "${tiflash_ready_num}" -eq 1 ]; then
 			break
 		fi
