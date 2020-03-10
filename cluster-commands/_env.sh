@@ -23,7 +23,10 @@ function apply()
 
 	local namespace="${1}"
 	local name="${2}"
+	here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"
+	cd ./tidb-cluster
 	helm install --values=values.yaml --name="${name}" --namespace="${namespace}" .
+	cd "${here}"
 	while true; do
 		local pd_ready_num=`kubectl get pod -n "${namespace}" | grep pd | grep Running | wc -l`
 		local tikv_ready_num=`kubectl get pod -n "${namespace}" | grep tikv | grep Running | wc -l`
