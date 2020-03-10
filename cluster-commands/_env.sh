@@ -244,6 +244,26 @@ function port()
 }
 export -f port
 
+function mysql()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ]; then
+		echo "usage: <cmd> port" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	local port="${3}"
+	if [ -z "${4+x}" ]; then
+		local db="test"
+	else
+		local db="${4}"
+	fi
+
+	mysql -u root -D ${db} -h 127.0.0.1 -P ${port}
+}
+export -f mysql
+
 # chaos-related func
 function chaos_help()
 {
