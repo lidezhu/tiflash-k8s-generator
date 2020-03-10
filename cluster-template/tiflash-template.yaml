@@ -146,6 +146,7 @@ data:
     tidb_status_addr = "{tidb_cluster_name}-tidb.{namespace}.svc:10080"
     service_addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:3930"
     overlap_threshold = 0.6
+    compact_log_min_period = 10
 
     [flash.flash_cluster]
     master_ttl = 60
