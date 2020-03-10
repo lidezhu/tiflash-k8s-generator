@@ -244,7 +244,7 @@ function port()
 }
 export -f port
 
-function mysql()
+function tidb_client()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ]; then
 		echo "usage: <cmd> port" >&2
@@ -262,7 +262,7 @@ function mysql()
 
 	mysql -u root -D ${db} -h 127.0.0.1 -P ${port}
 }
-export -f mysql
+export -f tidb_client
 
 # chaos-related func
 function chaos_help()

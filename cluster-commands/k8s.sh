@@ -29,6 +29,10 @@ function k8s_command()
 		local command="apply"
 	fi
 
+	if [ "${command}" == 'mysql' ]; then
+		local command="tidb_client"
+	fi
+
 	kubectl get ns "${namespace}" >/dev/null 2>&1
 	if [ "${?}" -ne 0 ]; then
 		echo "[cmd k8s] namespace ${namespace} not found. creating"
