@@ -27,6 +27,6 @@
 * `./test.sh show` show running schrodinger test
 
 ## Using chaos-mesh to test
-* `./chaos.sh apply [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv/delay/errno/mixed]` apply a specific chaos experiment
+* `./chaos.sh apply [kill/failure/delay-pd/delay-tikv/partition-pd/partition-tikv/delay/errno/mixed]` apply a specific chaos experiment
 * `./chaos.sh show` show all chaos experiment
-* `./chaos.sh delete [kill/failure/delay_pd/delay_tikv/partition_pd/partition_tikv/delay/errno/mixed]` delete a specific chaos experiment
+* `./chaos.sh delete [kill/failure/delay-pd/delay-tikv/partition-pd/partition-tikv/delay/errno/mixed]` delete a specific chaos experiment
