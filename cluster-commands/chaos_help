@@ -1,4 +1,4 @@
 apply <chaos-type>: run a chaos experiment
 delete <chaos-type>: delete a chaos experiment
 get: show status about chaos experiments
-<chaos-type> include kill/failure/delay-pd/delay-tikv/partition-pd/partition-tikv/duplicate-pd/duplicate-tikv/corrupt-pd/corrupt-tikv/loss-pd/loss-tikv/errno/delay/mixed/time-pd
+<chaos-type> include kill/failure/pd-failure/tikv-failure/tidb-failure/delay-pd/delay-tikv/partition-pd/partition-tikv/duplicate-pd/duplicate-tikv/corrupt-pd/corrupt-tikv/loss-pd/loss-tikv/errno/delay/mixed/time-pd

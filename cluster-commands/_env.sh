@@ -324,6 +324,12 @@ function chaos_apply()
 		kubectl apply -f io-mixed.yaml -n "${namespace}"
 	elif [ "${type}" == "pd-time" ]; then
 		kubectl apply -f time-chaos-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "pd-failure" ]; then
+		kubectl apply -f pd-failure.yaml -n "${namespace}"
+	elif [ "${type}" == "tikv-failure" ]; then
+		kubectl apply -f tikv-failure.yaml -n "${namespace}"
+	elif [ "${type}" == "tidb-failure" ]; then
+		kubectl apply -f tidb-failure.yaml -n "${namespace}"
 	else
 		echo "<apply> unknown chaos test: ${type}" >&2
 		exit 1
@@ -373,6 +379,12 @@ function chaos_delete()
 		kubectl delete -f io-mixed.yaml -n "${namespace}"
 	elif [ "${type}" == "pd-time" ]; then
 		kubectl delete -f time-chaos-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "pd-failure" ]; then
+		kubectl delete -f pd-failure.yaml -n "${namespace}"
+	elif [ "${type}" == "tikv-failure" ]; then
+		kubectl delete -f tikv-failure.yaml -n "${namespace}"
+	elif [ "${type}" == "tidb-failure" ]; then
+		kubectl delete -f tidb-failure.yaml -n "${namespace}"
 	else
 		echo "<apply> unknown chaos test: ${type}" >&2
 		exit 1

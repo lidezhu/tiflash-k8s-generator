@@ -1,7 +1,7 @@
 apiVersion: pingcap.com/v1alpha1
 kind: PodChaos
 metadata:
-  name: pd-failure
+  name: tidb-failure
   namespace: {chaos_namespace}
 spec:
   action: pod-failure
@@ -11,6 +11,6 @@ spec:
     namespaces:
       - {namespace}
     labelSelectors:
-      "app.kubernetes.io/component": "pd"
+      "app.kubernetes.io/component": "tidb"
   scheduler:
     cron: "@every 2m"
