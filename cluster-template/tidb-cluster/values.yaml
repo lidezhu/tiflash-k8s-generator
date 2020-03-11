@@ -479,7 +479,7 @@ monitor:
   # If you set rbac.create to true, you should leave this empty.
   # serviceAccount:
   persistent: false
-  storageClassName: local-storage
+  storageClassName: shared-nvme-disks
   storage: 10Gi
   initializer:
     image: pingcap/tidb-monitor-initializer:v3.0.8
@@ -570,7 +570,7 @@ binlog:
     # different classes might map to quality-of-service levels, or to backup policies,
     # or to arbitrary policies determined by the cluster administrators.
     # refer to https://kubernetes.io/docs/concepts/storage/storage-classes
-    storageClassName: local-storage
+    storageClassName: shared-nvme-disks
     storage: 20Gi
     # affinity for pump pod assignment, default: empty
     # ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity

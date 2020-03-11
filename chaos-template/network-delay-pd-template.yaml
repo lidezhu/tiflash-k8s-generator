@@ -1,7 +1,7 @@
 apiVersion: pingcap.com/v1alpha1
 kind: NetworkChaos
 metadata:
-  name: delay-tikv
+  name: delay-pd
   namespace: {chaos_namespace}
 spec:
   action: delay
@@ -10,12 +10,12 @@ spec:
     namespaces:
       - {namespace}
     labelSelectors:
-      "app.kubernetes.io/component": "tikv"
+      "app.kubernetes.io/component": "pd"
   delay:
-    latency: "2000ms"
-    correlation: "1"
-    jitter: "100ms"
-  duration: "20s"
+    latency: "1000ms"
+    correlation: "50"
+    jitter: "500ms"
+  duration: "10s"
   scheduler:
-    cron: "@every 40s"
+    cron: "@every 15s"
     

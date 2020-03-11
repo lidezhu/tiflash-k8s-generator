@@ -297,9 +297,9 @@ function chaos_apply()
 	elif [ "${type}" == "failure" ]; then
 		kubectl apply -f tiflash-failure.yaml -n "${namespace}"
 	elif [ "${type}" == "delay_pd" ]; then
-		kubectl apply -f network-delay-pd-tiflash.yaml -n "${namespace}"
+		kubectl apply -f network-delay-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "delay_tikv" ]; then
-		kubectl apply -f network-delay-tikv-tiflash.yaml -n "${namespace}"
+		kubectl apply -f network-delay-tikv.yaml -n "${namespace}"
 	elif [ "${type}" == "partition_pd" ]; then
 		kubectl apply -f network-partition-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition_tikv" ]; then

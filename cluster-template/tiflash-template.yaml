@@ -161,7 +161,7 @@ data:
     log-file = "/data/logs/proxy.log"
 
     [logger]
-    level = "trace"
+    level = "debug"
     log = "/data/logs/server.log"
     errorlog = "/data/logs/error.log"
     size = "4000M"

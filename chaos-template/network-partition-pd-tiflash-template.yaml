@@ -19,7 +19,7 @@ spec:
       labelSelectors:
         "app": "tiflash"
     mode: all
-  duration: "20s"
+  duration: "10s"
   scheduler:
-    cron: "@every 40s"
+    cron: "@every 15s"
     
