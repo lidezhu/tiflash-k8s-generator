@@ -1,0 +1,19 @@
+apiVersion: pingcap.com/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: corrupt-tikv
+  namespace: {chaos_namespace}
+spec:
+  action: corrupt
+  mode: one
+  selector:
+    namespaces:
+      - {namespace}
+    labelSelectors:
+      "app.kubernetes.io/component": "tikv"
+  corrupt:
+    corrupt: "40"
+    correlation: "25"
+  duration: "10s"
+  scheduler:
+    cron: "@every 15s"

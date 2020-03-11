@@ -300,6 +300,18 @@ function chaos_apply()
 		kubectl apply -f network-delay-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "delay-tikv" ]; then
 		kubectl apply -f network-delay-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "corrupt-pd" ]; then
+		kubectl apply -f network-corrupt-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "corrupt-tikv" ]; then
+		kubectl apply -f network-corrupt-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "duplicate-pd" ]; then
+		kubectl apply -f network-duplicate-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "duplicate-tikv" ]; then
+		kubectl apply -f network-duplicate-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "loss-pd" ]; then
+		kubectl apply -f network-loss-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "loss-tikv" ]; then
+		kubectl apply -f network-loss-tikv.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-pd" ]; then
 		kubectl apply -f network-partition-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-tikv" ]; then
@@ -310,6 +322,8 @@ function chaos_apply()
 		kubectl apply -f io-errno.yaml -n "${namespace}"
 	elif [ "${type}" == "mixed" ]; then
 		kubectl apply -f io-mixed.yaml -n "${namespace}"
+	elif [ "${type}" == "pd-time" ]; then
+		kubectl apply -f time-chaos-pd.yaml -n "${namespace}"
 	else
 		echo "<apply> unknown chaos test: ${type}" >&2
 		exit 1
@@ -335,6 +349,18 @@ function chaos_delete()
 		kubectl delete -f network-delay-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "delay-tikv" ]; then
 		kubectl delete -f network-delay-tikv-tiflash.yaml -n "${namespace}"
+	elif [ "${type}" == "corrupt-pd" ]; then
+		kubectl delete -f network-corrupt-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "corrupt-tikv" ]; then
+		kubectl delete -f network-corrupt-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "duplicate-pd" ]; then
+		kubectl delete -f network-duplicate-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "duplicate-tikv" ]; then
+		kubectl delete -f network-duplicate-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "loss-pd" ]; then
+		kubectl delete -f network-loss-pd.yaml -n "${namespace}"
+	elif [ "${type}" == "loss-tikv" ]; then
+		kubectl delete -f network-loss-tikv.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-pd" ]; then
 		kubectl delete -f network-partition-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-tikv" ]; then
@@ -345,6 +371,8 @@ function chaos_delete()
 		kubectl delete -f io-errno.yaml -n "${namespace}"
 	elif [ "${type}" == "mixed" ]; then
 		kubectl delete -f io-mixed.yaml -n "${namespace}"
+	elif [ "${type}" == "pd-time" ]; then
+		kubectl delete -f time-chaos-pd.yaml -n "${namespace}"
 	else
 		echo "<apply> unknown chaos test: ${type}" >&2
 		exit 1
@@ -366,6 +394,8 @@ function chaos_show()
 	kubectl get networkchaos -n "${namespace}"
 	echo "IOChaos:"
 	kubectl get iochaos -n "${namespace}"
+	echo "TimeChaos:"
+	kubectl get timechaos -n "${namespace}"
 }
 export -f chaos_show
 

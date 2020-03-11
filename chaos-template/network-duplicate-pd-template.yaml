@@ -1,0 +1,19 @@
+apiVersion: pingcap.com/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: duplicate-pd
+  namespace: {chaos_namespace}
+spec:
+  action: duplicate
+  mode: one
+  selector:
+    namespaces:
+      - {namespace}
+    labelSelectors:
+      "app.kubernetes.io/component": "pd"
+  duplicate:
+    duplicate: "40"
+    correlation: "25"
+  duration: "10s"
+  scheduler:
+    cron: "@every 15s"
