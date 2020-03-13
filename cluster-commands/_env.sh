@@ -321,7 +321,7 @@ function chaos_apply()
 		kubectl apply -f io-errno.yaml -n "${namespace}"
 	elif [ "${type}" == "mixed" ]; then
 		kubectl apply -f io-mixed.yaml -n "${namespace}"
-	elif [ "${type}" == "pd-time" ]; then
+	elif [ "${type}" == "time-pd" ]; then
 		kubectl apply -f time-chaos-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "pd-failure" ]; then
 		kubectl apply -f pd-failure.yaml -n "${namespace}"
@@ -376,7 +376,7 @@ function chaos_delete()
 		kubectl delete -f io-errno.yaml -n "${namespace}"
 	elif [ "${type}" == "mixed" ]; then
 		kubectl delete -f io-mixed.yaml -n "${namespace}"
-	elif [ "${type}" == "pd-time" ]; then
+	elif [ "${type}" == "time-pd" ]; then
 		kubectl delete -f time-chaos-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "pd-failure" ]; then
 		kubectl delete -f pd-failure.yaml -n "${namespace}"
