@@ -270,13 +270,12 @@ export -f tidb_client
 # chaos-related func
 function chaos_help()
 {
-	if [ -z "${1+x}" ] || [ -z "${2+x}" ]; then
+	if [ -z "${1+x}" ]; then
 		echo "usage: <cmd>" >&2
 		exit 1
 	fi
 
 	local namespace="${1}"
-	local name="${2}"
 	cat ./chaos_help
 }
 
