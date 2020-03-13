@@ -351,9 +351,9 @@ function chaos_delete()
 	elif [ "${type}" == "failure" ]; then
 		kubectl delete -f tiflash-failure.yaml -n "${namespace}"
 	elif [ "${type}" == "delay-pd" ]; then
-		kubectl delete -f network-delay-pd-tiflash.yaml -n "${namespace}"
+		kubectl delete -f network-delay-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "delay-tikv" ]; then
-		kubectl delete -f network-delay-tikv-tiflash.yaml -n "${namespace}"
+		kubectl delete -f network-delay-tikv.yaml -n "${namespace}"
 	elif [ "${type}" == "corrupt-pd" ]; then
 		kubectl delete -f network-corrupt-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "corrupt-tikv" ]; then
