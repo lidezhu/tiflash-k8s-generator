@@ -23,6 +23,7 @@ render_templ "${here}/chaos-template/network-duplicate-tikv-template.yaml" "${he
 render_templ "${here}/chaos-template/network-loss-pd-template.yaml" "${here}/${sub_dir}/network-loss-pd.yaml" "${render_str}"
 render_templ "${here}/chaos-template/network-loss-tikv-template.yaml" "${here}/${sub_dir}/network-loss-tikv.yaml" "${render_str}"
 render_templ "${here}/chaos-template/pd-failure-template.yaml" "${here}/${sub_dir}/pd-failure.yaml" "${render_str}"
+render_templ "${here}/chaos-template/tidb-failure-template.yaml" "${here}/${sub_dir}/tidb-failure.yaml" "${render_str}"
 render_templ "${here}/chaos-template/tiflash-failure-template.yaml" "${here}/${sub_dir}/tiflash-failure.yaml" "${render_str}"
 render_templ "${here}/chaos-template/tiflash-kill-template.yaml" "${here}/${sub_dir}/tiflash-kill.yaml" "${render_str}"
 render_templ "${here}/chaos-template/tikv-failure-template.yaml" "${here}/${sub_dir}/tikv-failure.yaml" "${render_str}"
