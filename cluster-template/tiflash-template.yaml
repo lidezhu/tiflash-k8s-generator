@@ -13,8 +13,12 @@ spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
       labels:
         app: tiflash
+        app.kubernetes.io/instance: "${tidb_cluster_name}"
     spec:
       initContainers:
       - name: init-tiflash
@@ -36,6 +40,10 @@ spec:
       containers:
       - name: tiflash
         image: hub.pingcap.net/tiflash/tics:{image_tag}
+        ports:
+          - containerPort: 8234
+            name: metrics
+            protocol: TCP
         command:
         - bash
         - "-c"
@@ -226,9 +234,9 @@ data:
     [readpool.coprocessor]
 
     [server]
-    labels = { "tiflash_http_port" = "8123" }
     engine-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:3930"
     advertise-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:20170"
+    status-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:20292"
 
     [storage]
 
