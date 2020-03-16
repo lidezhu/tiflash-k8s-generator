@@ -18,7 +18,7 @@ spec:
         prometheus.io/path: "/metrics"
       labels:
         app: tiflash
-        app.kubernetes.io/instance: "${tidb_cluster_name}"
+        app.kubernetes.io/instance: "{tidb_cluster_name}"
     spec:
       initContainers:
       - name: init-tiflash
