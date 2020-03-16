@@ -232,8 +232,6 @@ function port()
 	local mod="${3}"
 	local port="${4}"
 
-	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
-
 	if [ "${mod}" == "tidb" ]; then
 		kubectl  port-forward "svc/${name}-tidb" -n "${namespace}" ${port}:4000 >/dev/null 2>&1 &
 	elif [ "${mod}" == "pd" ]; then
