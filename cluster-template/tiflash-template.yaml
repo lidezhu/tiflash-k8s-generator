@@ -178,9 +178,6 @@ data:
     kvstore_path = "/data/kvstore"
     pd_addr = "{tidb_cluster_name}-pd.{namespace}.svc:2379"
 
-    [status]
-    metrics_port = 8234
-
   users.toml: |
     [quotas]
 
@@ -232,7 +229,6 @@ data:
     [server]
     engine-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:3930"
     advertise-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:20170"
-    status-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:20292"
 
     [storage]
 
