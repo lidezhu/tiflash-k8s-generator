@@ -9,6 +9,12 @@ alerting:
       - {{ .Values.monitor.prometheus.alertmanagerURL }}
 {{- end }}
 scrape_configs:
+- job_name: 'tiflash'
+  honor_labels: true
+  static_configs:
+  - targets:
+    - 'tiflash-0.tiflash.{namespace}.svc:8234'
+    - 'tiflash-0.tiflash.{namespace}.svc:20292'
 - job_name: 'pd'
   scrape_interval: 15s
   honor_labels: true

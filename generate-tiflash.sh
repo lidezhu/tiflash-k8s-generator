@@ -51,6 +51,7 @@ render_templ "${here}/cluster-template/tiflash-template.yaml" "${here}/${sub_dir
 render_templ "${here}/cluster-template/tiflash-multi-disk-template.yaml" "${here}/${sub_dir}/tiflash-multi-disk.yaml" "${render_str}"
 mkdir -p "${here}/${sub_dir}/tidb-cluster/"
 cp -r ${here}/cluster-template/tidb-cluster/* "${here}/${sub_dir}/tidb-cluster/"
+render_templ "${here}/cluster-template/tidb-cluster/templates/config/_prometheus-config.tpl" "${here}/${sub_dir}/tidb-cluster/templates/config/_prometheus-config.tpl" "${render_str}"
 cp ${here}/cluster-template/tidb-cluster/.helmignore "${here}/${sub_dir}/tidb-cluster/"
 #render_templ "${here}/cluster-template/tidb-cluster-template.yaml" "${here}/${sub_dir}/tidb-cluster.yaml" "${render_str}"
 
