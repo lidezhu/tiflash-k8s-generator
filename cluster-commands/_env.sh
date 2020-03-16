@@ -240,6 +240,8 @@ function port()
 		kubectl  port-forward "svc/${name}-pd" -n "${namespace}" ${port}:2379 >/dev/null 2>&1 &
 	elif [ "${mod}" == "tiflash" ]; then
 		kubectl  port-forward "svc/tiflash" -n "${namespace}" ${port}:9000 >/dev/null 2>&1 &
+	elif [ "${mod}" == "grafana" ]; then
+		kubectl port-forward "svc/${name}-grafana" -n "${namespace}" --address 0.0.0.0 ${port}:3000 >/dev/null 2>&1 &
 	else
 		echo "unsupported mod ${mod}" >&2
 		exit 0
