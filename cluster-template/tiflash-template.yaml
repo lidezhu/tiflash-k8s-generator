@@ -121,8 +121,6 @@ spec:
     port: 8123
   - name: metrics
     port: 8234
-  - name: metrics2
-    port: 20292
   clusterIP: None
   selector:
     app: tiflash
@@ -177,6 +175,9 @@ data:
     [raft]
     kvstore_path = "/data/kvstore"
     pd_addr = "{tidb_cluster_name}-pd.{namespace}.svc:2379"
+
+    [status]
+    metrics_port = 8234
 
   users.toml: |
     [quotas]
