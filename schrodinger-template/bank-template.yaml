@@ -11,5 +11,5 @@ spec:
       - "-c"
       - |
         export TIDB_SERVICE="{tidb_cluster_name}-tidb.{namespace}.svc:4000"
-        /bank -concurrency=80
+        /bank -concurrency=20
       
