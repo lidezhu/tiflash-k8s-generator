@@ -13,5 +13,5 @@ spec:
     labelSelectors:
       "app": "tiflash"
   scheduler:
-    cron: "@every 2m"
+    cron: "@every 5m"
     
