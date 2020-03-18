@@ -1,0 +1,21 @@
+apiVersion: pingcap.com/v1alpha1
+kind: NetworkChaos
+metadata:
+  name: delay-tiflash
+  namespace: {chaos_namespace}
+spec:
+  action: delay
+  mode: all
+  selector:
+    namespaces:
+      - {namespace}
+    labelSelectors:
+      "app": "tiflash"
+  delay:
+    latency: "1000ms"
+    correlation: "50"
+    jitter: "500ms"
+  duration: "10s"
+  scheduler:
+    cron: "@every 15s"
+    

@@ -300,18 +300,26 @@ function chaos_apply()
 		kubectl apply -f network-delay-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "delay-tikv" ]; then
 		kubectl apply -f network-delay-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "delay-tiflash" ]; then
+		kubectl apply -f network-delay-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "corrupt-pd" ]; then
 		kubectl apply -f network-corrupt-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "corrupt-tikv" ]; then
 		kubectl apply -f network-corrupt-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "corrupt-tiflash" ]; then
+		kubectl apply -f network-corrupt-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "duplicate-pd" ]; then
 		kubectl apply -f network-duplicate-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "duplicate-tikv" ]; then
 		kubectl apply -f network-duplicate-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "duplicate-tiflash" ]; then
+		kubectl apply -f network-duplicate-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "loss-pd" ]; then
 		kubectl apply -f network-loss-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "loss-tikv" ]; then
 		kubectl apply -f network-loss-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "loss-tiflash" ]; then
+		kubectl apply -f network-loss-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-pd" ]; then
 		kubectl apply -f network-partition-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-tikv" ]; then
