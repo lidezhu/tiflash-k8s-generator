@@ -192,6 +192,12 @@ function debug()
 	if [ "${mod}" == "tiflash" ]; then
 		kubectl cp "${namespace}/${pod_name}":"/data/logs/server.log" "./server-${pod_num}.log" -c tiflash
 		kubectl cp "${namespace}/${pod_name}":"/data/logs/error.log" "./error-${pod_num}.log" -c tiflash
+	elif [ "${mod}" == "tidb" ]; then
+		if [ "${container}" != "" ]; then
+			kubectl logs "${pod_name}" -c "${container}" -n "${namespace}" > ${pod_name}.log
+		else 
+			kubectl logs "${pod_name}" -c tidb -n "${namespace}" > ${pod_name}.log
+		fi
 	else
 		kubectl logs "${pod_name}" -n "${namespace}" > ${pod_name}.log
 	fi
