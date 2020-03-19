@@ -170,6 +170,34 @@ function logs()
 }
 export -f logs
 
+function debug()
+{
+	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ]; then
+		echo "usage: <cmd> mod pod-num" >&2
+		exit 1
+	fi
+
+	local namespace="${1}"
+	local name="${2}"
+	local mod="${3}"
+	local pod_num="${4}"
+	if [ -z "${5+x}" ]; then
+		local container=""
+	else
+		local container="${5}"
+	fi
+
+	local pod_name=`get_pod_name "${namespace}" "${name}" "${mod}" "${pod_num}"`
+
+	if [ "${mod}" == "tiflash" ]; then
+		kubectl cp "${namespace}/${pod_name}":"/data/logs/server.log" "./server-${pod_num}.log" -c tiflash
+		kubectl cp "${namespace}/${pod_name}":"/data/logs/error.log" "./error-${pod_num}.log" -c tiflash
+	else
+		kubectl logs "${pod_name}" -n "${namespace}" > ${pod_name}.log
+	fi
+}
+export -f debug
+
 function copy()
 {
 	if [ -z "${1+x}" ] || [ -z "${2+x}" ] || [ -z "${3+x}" ] || [ -z "${4+x}" ] || [ -z "${5+x}" ] || [ -z "${6+x}" ]; then
