@@ -397,18 +397,26 @@ function chaos_delete()
 		kubectl delete -f network-delay-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "delay-tikv" ]; then
 		kubectl delete -f network-delay-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "delay-tiflash" ]; then
+		kubectl delete -f network-delay-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "corrupt-pd" ]; then
 		kubectl delete -f network-corrupt-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "corrupt-tikv" ]; then
 		kubectl delete -f network-corrupt-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "corrupt-tiflash" ]; then
+		kubectl delete -f network-corrupt-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "duplicate-pd" ]; then
 		kubectl delete -f network-duplicate-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "duplicate-tikv" ]; then
 		kubectl delete -f network-duplicate-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "duplicate-tiflash" ]; then
+		kubectl delete -f network-duplicate-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "loss-pd" ]; then
 		kubectl delete -f network-loss-pd.yaml -n "${namespace}"
 	elif [ "${type}" == "loss-tikv" ]; then
 		kubectl delete -f network-loss-tikv.yaml -n "${namespace}"
+	elif [ "${type}" == "loss-tiflash" ]; then
+		kubectl delete -f network-loss-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-pd" ]; then
 		kubectl delete -f network-partition-pd-tiflash.yaml -n "${namespace}"
 	elif [ "${type}" == "partition-tikv" ]; then
