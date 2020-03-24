@@ -175,6 +175,7 @@ data:
     [raft]
     kvstore_path = "/data/kvstore"
     pd_addr = "{tidb_cluster_name}-pd.{namespace}.svc:2379"
+    storage_engine = "dt"
 
     [status]
     metrics_port = 8234
