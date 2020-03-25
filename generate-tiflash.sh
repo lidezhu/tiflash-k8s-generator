@@ -11,7 +11,7 @@ namespace="${1}"
 shift 1
 
 if [ -z "${1+x}" ]; then
-	image_tag="k8s20200324"
+	image_tag="k8s20200325"
 else
 	image_tag="${1}"
 fi
