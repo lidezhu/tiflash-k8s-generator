@@ -45,7 +45,7 @@ spec:
           ordinal=${BASH_REMATCH[1]}
           set +ex
           while true; do
-            nslookup tiflash-${ordinal}.tiflash.{namespace}.svc
+            nslookup tiflash-${ordinal}.tiflash.{namespace}.svc.cluster.local
             if [ ${?} -eq 0 ]; then
               break;
             fi
@@ -145,8 +145,8 @@ data:
     interserver_http_port = 9009
 
     [flash]
-    tidb_status_addr = "{tidb_cluster_name}-tidb.{namespace}.svc:10080"
-    service_addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:3930"
+    tidb_status_addr = "{tidb_cluster_name}-tidb.{namespace}.svc.cluster.local:10080"
+    service_addr = "tiflash-{pod_num}.tiflash.{namespace}.svc.cluster.local:3930"
     overlap_threshold = 0.6
     compact_log_min_period = 10
 
@@ -174,7 +174,7 @@ data:
 
     [raft]
     kvstore_path = "/data/kvstore"
-    pd_addr = "{tidb_cluster_name}-pd.{namespace}.svc:2379"
+    pd_addr = "{tidb_cluster_name}-pd.{namespace}.svc.cluster.local:2379"
     storage_engine = "dt"
 
     [status]
@@ -229,8 +229,8 @@ data:
     [readpool.coprocessor]
 
     [server]
-    engine-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:3930"
-    advertise-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc:20170"
+    engine-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc.cluster.local:3930"
+    advertise-addr = "tiflash-{pod_num}.tiflash.{namespace}.svc.cluster.local:20170"
 
     [storage]
 
