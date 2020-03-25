@@ -8,6 +8,11 @@ fi
 
 namespace="${1}"
 
+if [[ "${namespace}" =~ "/" ]]; then
+	echo "Failed to generate file. Namespace shouldn't contain character '/'' in it" >&2
+	exit 1
+fi
+
 shift 1
 
 if [ -z "${1+x}" ]; then
