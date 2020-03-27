@@ -41,6 +41,16 @@ spec:
         - "-c"
         - |
           set -ex
+          [[ `hostname` =~ -([0-9]+)$ ]] || exit 1
+          ordinal=${BASH_REMATCH[1]}
+          set +ex
+          while true; do
+            nslookup tiflash-${ordinal}.tiflash.{namespace}.svc.cluster.local
+            if [ ${?} -eq 0 ]; then
+              break;
+            fi
+            sleep 1
+          done
           /tiflash server --config-file /data/config.toml
         env:
         - name: LD_LIBRARY_PATH
