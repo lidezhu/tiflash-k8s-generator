@@ -73,8 +73,6 @@ pd:
     [replication]
     location-labels = ["region", "zone", "rack", "host"]
     enable-placement-rules = true
-    [schedule]
-    merge-schedule-limit = 0
 
   # pd Service
   # we can only specify clusterIP and loadBalancerIP now
@@ -199,8 +197,6 @@ tikv:
   # (choose the version matching your tikv) for detailed explanation of each parameter.
   config: |
     log-level = "info"
-    [raftstore]
-    hibernate-regions = false
 
   # # Here are some parameters you MUST customize (Please configure in the above `tikv.config` section):
   #
