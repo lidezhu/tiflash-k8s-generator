@@ -3,6 +3,7 @@ kind: Pod
 metadata:
   name: ledger
 spec:
+  restartPolicy: Never
   containers:
     - name: ledger-container
       image: hub.pingcap.net/tiflash/schrodinger:{schrodinger_tag}

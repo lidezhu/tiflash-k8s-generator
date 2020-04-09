@@ -16,7 +16,7 @@ fi
 shift 1
 
 if [ -z "${1+x}" ]; then
-	image_tag="k8s20200327"
+	image_tag="k8s20200409-4.0"
 else
 	image_tag="${1}"
 fi
