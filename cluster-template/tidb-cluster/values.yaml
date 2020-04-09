@@ -73,6 +73,9 @@ pd:
     [replication]
     location-labels = ["region", "zone", "rack", "host"]
     enable-placement-rules = true
+    [[schedule.schedulers]] 
+    type = "random-merge"
+    args = []
 
   # pd Service
   # we can only specify clusterIP and loadBalancerIP now
