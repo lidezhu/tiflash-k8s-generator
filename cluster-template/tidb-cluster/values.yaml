@@ -100,7 +100,7 @@ pd:
     requests:
       # cpu: 4000m
       # memory: 4Gi
-      storage: 1Gi
+      storage: 40Gi
 
   ## affinity defines pd scheduling rules,it's default settings is empty.
   ## please read the affinity document before set your scheduling rule:
@@ -249,7 +249,7 @@ tikv:
     requests:
       # cpu: 12000m
       # memory: 24Gi
-      storage: 10Gi
+      storage: 100Gi
 
   ## affinity defines tikv scheduling rules,affinity default settings is empty.
   ## please read the affinity document before set your scheduling rule:
