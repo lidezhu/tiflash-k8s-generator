@@ -31,7 +31,7 @@ function apply()
 		local pd_ready_num=`kubectl get pod -n "${namespace}" | grep "\-pd\-" | grep Running | wc -l`
 		local tikv_ready_num=`kubectl get pod -n "${namespace}" | grep "\-tikv\-" | grep Running | wc -l`
 		local tidb_ready_num=`kubectl get pod -n "${namespace}" | grep "\-tidb\-" | grep Running | wc -l`
-		if [ "${pd_ready_num}" -eq 3 ] && [ "${tikv_ready_num}" -eq 3 ] && [ "${tidb_ready_num}" -eq 1 ]; then
+		if [ "${pd_ready_num}" -eq 1 ] && [ "${tikv_ready_num}" -eq 1 ] && [ "${tidb_ready_num}" -eq 1 ]; then
 			break
 		fi
 		echo "wait for tidb cluster ready, pd_ready_num: ${pd_ready_num}, tikv_ready_num: ${tikv_ready_num}, tidb_ready_num: ${tidb_ready_num}"
