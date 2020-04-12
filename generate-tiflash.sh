@@ -16,7 +16,9 @@ fi
 shift 1
 
 if [ -z "${1+x}" ]; then
-	image_tag="k8s20200409-4.0"
+	# image_tag="k8s20200409-4.0"
+	# disable rough set index
+	image_tag="20200412-4.0"
 else
 	image_tag="${1}"
 fi
@@ -41,7 +43,7 @@ else
 	storage_class_name="${5}"
 fi
 
-schrodinger_tag="k8s20200212"
+schrodinger_tag="k8s20200412"
 test_namespace="${namespace}-test"
 
 here="`cd $(dirname ${BASH_SOURCE[0]}) && pwd`"

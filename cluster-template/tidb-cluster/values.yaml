@@ -73,6 +73,7 @@ pd:
     [replication]
     location-labels = ["region", "zone", "rack", "host"]
     enable-placement-rules = true
+    max-replicas = 1
     [[schedule.schedulers]] 
     type = "random-merge"
     args = []
@@ -82,7 +83,7 @@ pd:
   service:
     clusterIP: "None"
 
-  replicas: 3
+  replicas: 1
   image: hub.pingcap.net/tiflash/pd:k8s20200409-4.0
   # storageClassName is a StorageClass provides a way for administrators to describe the "classes" of storage they offer.
   # different classes might map to quality-of-service levels, or to backup policies,
@@ -230,7 +231,7 @@ tikv:
   # Note that we can't set raftstore.capacity in config because it will be overridden by the command line parameter,
   # we can only set capacity in tikv.resources.limits.storage.
 
-  replicas: 3
+  replicas: 1
   image: hub.pingcap.net/tiflash/tikv:k8s20200409-4.0
   # storageClassName is a StorageClass provides a way for administrators to describe the "classes" of storage they offer.
   # different classes might map to quality-of-service levels, or to backup policies,
