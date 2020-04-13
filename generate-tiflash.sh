@@ -18,7 +18,7 @@ shift 1
 if [ -z "${1+x}" ]; then
 	# image_tag="k8s20200409-4.0"
 	# disable rough set index
-	image_tag="20200412-4.0"
+	image_tag="broadcast-join01"
 else
 	image_tag="${1}"
 fi

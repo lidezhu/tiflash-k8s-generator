@@ -84,7 +84,7 @@ pd:
     clusterIP: "None"
 
   replicas: 1
-  image: hub.pingcap.net/tiflash/pd:k8s20200409-4.0
+  image: hub.pingcap.net/tiflash/pd:broadcast-join01
   # storageClassName is a StorageClass provides a way for administrators to describe the "classes" of storage they offer.
   # different classes might map to quality-of-service levels, or to backup policies,
   # or to arbitrary policies determined by the cluster administrators.
@@ -232,7 +232,7 @@ tikv:
   # we can only set capacity in tikv.resources.limits.storage.
 
   replicas: 1
-  image: hub.pingcap.net/tiflash/tikv:k8s20200409-4.0
+  image: hub.pingcap.net/tiflash/tikv:broadcast-join01
   # storageClassName is a StorageClass provides a way for administrators to describe the "classes" of storage they offer.
   # different classes might map to quality-of-service levels, or to backup policies,
   # or to arbitrary policies determined by the cluster administrators.
@@ -329,7 +329,7 @@ tidb:
   # initSqlConfigMapName: tidb-initsql
   # initSql: |-
   #   create database app;
-  image: hub.pingcap.net/tiflash/tidb:k8s20200409-4.0
+  image: hub.pingcap.net/tiflash/tidb:broadcast-join01
   # Image pull policy.
   imagePullPolicy: IfNotPresent
 
